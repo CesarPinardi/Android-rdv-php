@@ -1,8 +1,10 @@
 package com.example.rdv01;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -62,7 +65,6 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         }
     }
 
-    /*calendario no onclick do botao*/
     @Override
     public void onClick(View v) {
 
@@ -115,25 +117,30 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
     }
 
     public void OnEnviarMovimento(View view) {
-        /*
-        //alerta para enviar
+
         AlertDialog alerta;
 
-        //Cria o gerador do AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //define a mensagem
-        builder.setMessage("Tem certeza que deseja enviar?");
-        //define um botão como positivo
-        builder.setPositiveButton("Sim", (arg0, arg1) ->
-                Toast.makeText(Movimento.this, "positivo=" + arg1, Toast.LENGTH_SHORT).show());
-        //define um botão como negativo.
-        builder.setNegativeButton("Não", (arg0, arg1) ->
-                Toast.makeText(Movimento.this, "negativo=" + arg1, Toast.LENGTH_SHORT).show());
-        //cria o AlertDialog
+
+        builder.setMessage("Deseja enviar os dados?");
+
+        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                /*Função que prepara para o envio dos dados*/
+                callBackground();
+            }
+        });
+
+        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(Movimento.this, "Dados não enviados" + arg1, Toast.LENGTH_SHORT).show();
+            }
+        });
         alerta = builder.create();
-        //Exibe
         alerta.show();
-        */
+    }
+
+    private void callBackground() {
 
         String strIdFunc = id_func.getText().toString();
         String strIdDesp = id_desp.getText().toString() ;
@@ -145,7 +152,6 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         String type = "regMov";
         BackgroundWorker backgroundWorker = new BackgroundWorker(this);
         backgroundWorker.execute(type,strIdFunc,strIdDesp,strValorDesp,strValorKm,strObs,strData);
-
     }
 
 }

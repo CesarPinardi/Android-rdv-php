@@ -13,17 +13,33 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <TextView
-            android:id="@+id/etFunc"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:textSize="20sp" />
-        <!-- android:inputType="text caso voltar para editText -->
+        <LinearLayout
+            android:id="@+id/LinearLayout03"
+            android:layout_width="312dp"
+            android:layout_height="47dp">
+
+            <TextView
+                android:id="@+id/label"
+                android:layout_width="80dp"
+                android:layout_height="45dp"
+                android:text="Usuário:"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/etFunc"
+                android:layout_width="262dp"
+                android:layout_height="45dp"
+                android:textSize="20sp" />
+            <!-- android:inputType="text caso voltar para editText -->
+
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/tvResult"
             android:layout_width="match_parent"
-            android:layout_height="15dp"
+            android:layout_height="2dp"
             android:text=""
             android:textSize="18sp"
             android:visibility="invisible" />
@@ -47,7 +63,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:onClick="getSelectedRadioButton"
-                android:text="Combustível" />
+                android:text="Combustível"
+                android:visibility="visible"
+                tools:visibility="visible" />
 
             <RadioButton
                 android:id="@+id/rbEstacionamento"
@@ -96,7 +114,9 @@
             android:hint="Valor Km: "
             android:inputType="number"
             android:textSize="20sp"
-            />
+            android:text="0"
+            android:visibility="invisible"
+            tools:visibility="invisible" />
 
         <EditText
             android:id="@+id/etObs"

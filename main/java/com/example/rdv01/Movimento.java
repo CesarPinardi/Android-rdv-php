@@ -29,7 +29,7 @@ import java.util.Calendar;
 public class Movimento extends AppCompatActivity implements View.OnClickListener{
     private static final String FILE_NAME = "movimento";
     EditText  valor_desp, valor_km, obs;
-    TextView id_func, id_desp;
+    TextView id_func, id_desp, labelkm;
 
     /* declaracoes para o calendario */
     Button btnDatePicker;
@@ -50,6 +50,8 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
 
         btnDatePicker = findViewById(R.id.btn_date);
         txtDate = findViewById(R.id.in_date);
+
+        labelkm = findViewById(R.id.labelKm);
 
         btnDatePicker.setOnClickListener(this);
 
@@ -97,6 +99,7 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         if(singleButton.getText().equals("Combustível")){
             id_desp.setText("2");
             valor_km.setVisibility(View.VISIBLE);
+            labelkm.setVisibility(View.VISIBLE);
         }
         if (singleButton.getText().equals("Estacionamento")){
             id_desp.setText("3");
@@ -114,8 +117,8 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
     }
 
     public void OnGuardarMovimento(View view) {
-        Intent intent = new Intent(this, Imagem.class);
-        startActivity(intent);
+        /*aqui guardar em um json para envio futuro*/
+
     }
 
     public void OnEnviarMovimento(View view) {
@@ -154,6 +157,34 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         String type = "regMov";
         BackgroundWorker backgroundWorker = new BackgroundWorker(this);
         backgroundWorker.execute(type,strIdFunc,strIdDesp,strValorDesp,strValorKm,strObs,strData);
+
+        AlertDialog alerta;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Dados enviados com sucesso!");
+        builder.setMessage("Deseja enviar uma imagem?");
+
+        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                /*Função que prepara para o envio dos dados*/
+                callImagem();
+            }
+        });
+
+        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(Movimento.this, "Ok!" + arg1, Toast.LENGTH_SHORT).show();
+                /*aqui colocar um sleep antes de voltar para o menu*/
+            }
+        });
+        alerta = builder.create();
+        alerta.show();
+    }
+
+    private void callImagem() {
+        Intent intent = new Intent(this, Imagem.class);
+        startActivity(intent);
     }
 
 }
+

@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:id="@+id/LinearLayout03"
-            android:layout_width="312dp"
+            android:layout_width="331dp"
             android:layout_height="47dp">
 
             <TextView
@@ -23,18 +23,17 @@
                 android:layout_width="80dp"
                 android:layout_height="45dp"
                 android:text="Usuário:"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/etFunc"
                 android:layout_width="262dp"
                 android:layout_height="45dp"
-                android:textSize="20sp" />
-            <!-- android:inputType="text caso voltar para editText -->
+                android:textSize="20sp"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
-
-
 
         <TextView
             android:id="@+id/tvResult"
@@ -43,7 +42,6 @@
             android:text=""
             android:textSize="18sp"
             android:visibility="invisible" />
-
 
         <RadioGroup
             android:id="@+id/rg_despesas"
@@ -97,34 +95,93 @@
 
         </RadioGroup>
 
-        <EditText
-            android:id="@+id/etValorDesp"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:hint="Valor da Despesa: "
-            android:inputType="number"
-            android:textSize="20sp" />
+        <LinearLayout
+            android:id="@+id/LinearLayout05"
+            android:layout_width="336dp"
+            android:layout_height="47dp">
 
+            <TextView
+                android:id="@+id/labelDesp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Valor da Despesa:"
+                android:textSize="18sp"
+                android:textColor="@color/black"/>
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="match_parent" />
 
-        <EditText
-            android:id="@+id/etValorKm"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
+            <EditText
+                android:id="@+id/etValorDesp"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:inputType="number"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black"/>
 
-            android:hint="Valor Km: "
-            android:inputType="number"
-            android:textSize="20sp"
-            android:text="0"
-            android:visibility="invisible"
-            tools:visibility="invisible" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/etObs"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:hint="Obs: "
-            android:inputType="text"
-            android:textSize="20sp" />
+        <LinearLayout
+            android:id="@+id/LinearLayout06"
+            android:layout_width="336dp"
+            android:layout_height="47dp">
+
+            <TextView
+                android:id="@+id/labelKm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Valor do combustível:"
+                android:visibility="invisible"
+                tools:visibility="invisible"
+                android:textSize="18sp"
+                android:textColor="@color/black"/>
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/etValorKm"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:inputType="number"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:text="0"
+                android:visibility="invisible"
+                tools:visibility="invisible"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout08"
+            android:layout_width="336dp"
+            android:layout_height="47dp">
+
+            <TextView
+                android:id="@+id/labelObs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Observação:"
+                android:textSize="18sp"
+                android:textColor="@color/black"/>
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/etObs"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:inputType="text"
+                android:textSize="18sp"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
@@ -156,7 +213,6 @@
                 android:gravity="center" />
 
         </LinearLayout>
-
 
         <Space
             android:layout_width="match_parent"

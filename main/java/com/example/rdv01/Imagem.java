@@ -1,8 +1,8 @@
 package com.example.rdv01;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -32,6 +34,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,43 +80,33 @@ public class Imagem extends AppCompatActivity {
 
     boolean check = true;
 
-    private int GALLERY = 1, CAMERA = 2;
+    private final int GALLERY = 1;
+    private final int CAMERA = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_imagem);
 
-        GetImageFromGalleryButton = (Button)findViewById(R.id.buttonSelect);
+        GetImageFromGalleryButton = findViewById(R.id.buttonSelect);
 
-        UploadImageOnServerButton = (Button)findViewById(R.id.buttonUpload);
+        UploadImageOnServerButton = findViewById(R.id.buttonUpload);
 
-        ShowSelectedImage = (ImageView)findViewById(R.id.imageView);
+        ShowSelectedImage = findViewById(R.id.imageView);
 
-        imageName=(EditText)findViewById(R.id.imageName);
+        imageName= findViewById(R.id.imageName);
 
         byteArrayOutputStream = new ByteArrayOutputStream();
 
-        GetImageFromGalleryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                showPictureDialog();
+        GetImageFromGalleryButton.setOnClickListener(view -> showPictureDialog());
 
 
-            }
-        });
+        UploadImageOnServerButton.setOnClickListener(view -> {
 
+            GetImageNameFromEditText = imageName.getText().toString();
 
-        UploadImageOnServerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            UploadImageToServer();
 
-                GetImageNameFromEditText = imageName.getText().toString();
-
-                UploadImageToServer();
-
-            }
         });
 
         if (ContextCompat.checkSelfPermission(Imagem.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -126,22 +119,19 @@ public class Imagem extends AppCompatActivity {
 
     private void showPictureDialog(){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        pictureDialog.setTitle("Select Action");
+        pictureDialog.setTitle("Selecione uma ação");
         String[] pictureDialogItems = {
-                "Photo Gallery",
+                "Galeria de fotos",
                 "Camera" };
         pictureDialog.setItems(pictureDialogItems,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                choosePhotoFromGallary();
-                                break;
-                            case 1:
-                                takePhotoFromCamera();
-                                break;
-                        }
+                (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            choosePhotoFromGallary();
+                            break;
+                        case 1:
+                            takePhotoFromCamera();
+                            break;
                     }
                 });
         pictureDialog.show();
@@ -162,7 +152,7 @@ public class Imagem extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == this.RESULT_CANCELED) {
+        if (resultCode == RESULT_CANCELED) {
             return;
         }
         if (requestCode == GALLERY) {
@@ -170,14 +160,12 @@ public class Imagem extends AppCompatActivity {
                 Uri contentURI = data.getData();
                 try {
                     FixBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    // String path = saveImage(bitmap);
-                    //Toast.makeText(Imagem.this, "Image Saved!", Toast.LENGTH_SHORT).show();
                     ShowSelectedImage.setImageBitmap(FixBitmap);
                     UploadImageOnServerButton.setVisibility(View.VISIBLE);
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(Imagem.this, "Failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Imagem.this, "Erro!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -185,8 +173,6 @@ public class Imagem extends AppCompatActivity {
             FixBitmap = (Bitmap) data.getExtras().get("data");
             ShowSelectedImage.setImageBitmap(FixBitmap);
             UploadImageOnServerButton.setVisibility(View.VISIBLE);
-            //  saveImage(thumbnail);
-            //Toast.makeText(ShadiRegistrationPart5.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -199,6 +185,7 @@ public class Imagem extends AppCompatActivity {
 
         ConvertImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
+        @SuppressLint("StaticFieldLeak")
         class AsyncTaskUploadClass extends AsyncTask<Void,Void,String> {
 
             @Override
@@ -206,7 +193,7 @@ public class Imagem extends AppCompatActivity {
 
                 super.onPreExecute();
 
-                progressDialog = ProgressDialog.show(Imagem.this,"Image is Uploading","Please Wait",false,false);
+                progressDialog = ProgressDialog.show(Imagem.this,"A imagem está sendo enviada...","Por favor, aguarde...",false,false);
             }
 
             @Override
@@ -220,20 +207,19 @@ public class Imagem extends AppCompatActivity {
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             protected String doInBackground(Void... params) {
 
                 ImageProcessClass imageProcessClass = new ImageProcessClass();
 
-                HashMap<String,String> HashMapParams = new HashMap<String,String>();
+                HashMap<String,String> HashMapParams = new HashMap<>();
 
                 HashMapParams.put(ImageTag, GetImageNameFromEditText);
 
                 HashMapParams.put(ImageName, ConvertImage);
 
-                String FinalData = imageProcessClass.ImageHttpRequest("http://192.168.0.126/rdv/uploadExample/upload-image-to-server.php", HashMapParams);
-
-                return FinalData;
+                return imageProcessClass.ImageHttpRequest("http://192.168.0.126/rdv/uploadExample/upload-image-to-server.php", HashMapParams);
             }
         }
         AsyncTaskUploadClass AsyncTaskUploadClassOBJ = new AsyncTaskUploadClass();
@@ -242,7 +228,8 @@ public class Imagem extends AppCompatActivity {
 
     public class ImageProcessClass{
 
-        public String ImageHttpRequest(String requestURL,HashMap<String, String> PData) {
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        public String ImageHttpRequest(String requestURL, HashMap<String, String> PData) {
 
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -265,7 +252,7 @@ public class Imagem extends AppCompatActivity {
 
                 bufferedWriter = new BufferedWriter(
 
-                        new OutputStreamWriter(outputStream, "UTF-8"));
+                        new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
 
                 bufferedWriter.write(bufferedWriterDataFN(PData));
 
@@ -320,16 +307,16 @@ public class Imagem extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 5) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Now user should be able to use camera
+                // Camera foi acessada
 
             }
             else {
 
-                Toast.makeText(Imagem.this, "Unable to use Camera..Please Allow us to use Camera", Toast.LENGTH_LONG).show();
+                Toast.makeText(Imagem.this, "Não foi possível abrir a camera", Toast.LENGTH_LONG).show();
 
             }
         }

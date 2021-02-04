@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -23,21 +22,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.Calendar;
 
+@SuppressWarnings("ALL")
 public class Movimento extends AppCompatActivity implements View.OnClickListener{
     EditText  valor_desp, valor_km, obs;
     TextView id_func, id_desp, labelkm;
 
-    /* declaracoes para o calendario */
-    Button btnDatePicker, btnInsert, btnStore;
+    /* declarações para o calendario */
+    Button btnDatePicker, btnInsert;
     EditText txtDate;
     private int mYear, mMonth, mDay;
 
@@ -55,7 +51,6 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
 
         btnDatePicker = findViewById(R.id.btn_date);
         btnInsert = findViewById(R.id.btnInsertMov);
-        btnStore = findViewById(R.id.btnGuardaMov);
 
         txtDate = findViewById(R.id.in_date);
 
@@ -69,7 +64,6 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
             Bundle params = intent.getExtras();
             if (params != null) {
                 String login = params.getString("loginUser");
-
                 id_func.setText(login);
             }
         }
@@ -79,13 +73,11 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
 
         if (v == btnDatePicker) {
-
             /* Data atual */
             final Calendar c = Calendar.getInstance();
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
-
 
             @SuppressLint("SetTextI18n")
             DatePickerDialog datePickerDialog = new DatePickerDialog(this,
@@ -101,11 +93,13 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         int radioID = radGroup.getCheckedRadioButtonId();
         RadioButton singleButton = findViewById(radioID);
 
+        /*Setando os valores para enviar para o banco*/
         if(singleButton.getText().equals("Alimentação")){
             id_desp.setText("1");
         }
         if(singleButton.getText().equals("Combustível")){
             id_desp.setText("2");
+            /*caso selecione combustivel, abre a editText*/
             valor_km.setVisibility(View.VISIBLE);
             labelkm.setVisibility(View.VISIBLE);
         }
@@ -124,58 +118,8 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
 
     }
 
-    public JSONObject OnGuardarMovimento(View view) throws IOException {
-        /*aqui guardar em um json para envio futuro*/
-
-        JSONObject jObj = new JSONObject();
-
-        try {
-            jObj.put("id_func", id_func.getText().toString());
-            jObj.put("id_desp", id_desp.getText().toString());
-            jObj.put("valor_desp", valor_desp.getText().toString());
-            jObj.put("valor_km", valor_km.getText().toString());
-            jObj.put("obs", obs.getText().toString());
-            jObj.put("dataM", txtDate.getText().toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(jObj);
-
-        String strJson = jObj.toString();
-        FileOutputStream fos = null;
-
-        final String FILE_NAME = id_func.getText().toString() + "  Data  " + txtDate.getText().toString();
-        
-        try {
-            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
-            fos.write(strJson.getBytes());
-
-            Toast.makeText(this, "Salvo em  " + getFilesDir() + "/" + FILE_NAME,
-                    Toast.LENGTH_LONG).show();
-            
-            // Toast para depois dos testes:
-            // Toast.makeText(this, "Despesa salva!" , Toast.LENGTH_LONG).show();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return jObj;
-
-    }
-
     public boolean isNetworkAvailable(){
+        /*função para verificar a conexão*/
         try {
             ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = null;
@@ -189,41 +133,30 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         }
     }
 
-
     public void OnEnviarMovimento(View view) {
+        /*caso não tenha internet internet*/
+        AlertDialog alerta;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         if(!isNetworkAvailable()){
-
-            AlertDialog alerta;
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setTitle("Dispositivo não conectado!").
             setMessage("Conecte-se à uma rede e reinicie a aplicação para tentar novamente...\n\nOu então escolha a opção 'Guardar'.");
             alerta = builder.create();
             alerta.show();
             btnInsert.setClickable(false);
-            btnInsert.setBackgroundColor(Color.DKGRAY);
 
         } else {
-            AlertDialog alerta;
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setMessage("Deseja enviar os dados?");
 
-            builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface arg0, int arg1) {
-                    /*Função que prepara para o envio dos dados*/
-                    callBackground();
-                }
+            builder.setPositiveButton("Sim", (arg0, arg1) -> {
+                /*Função que prepara para o envio dos dados*/
+                callBackground();
             });
 
-            builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface arg0, int arg1) {
-                    Toast.makeText(Movimento.this, "Dados não enviados" + arg1, Toast.LENGTH_SHORT).show();
-                }
-            });
+            builder.setNegativeButton("Não", (arg0, arg1) ->
+                    Toast.makeText(Movimento.this, "Dados não enviados" + arg1, Toast.LENGTH_SHORT).show());
             alerta = builder.create();
             alerta.show();
         }
@@ -249,18 +182,14 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         builder.setTitle("Dados enviados com sucesso!");
         builder.setMessage("Deseja enviar uma imagem?");
 
-        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
-                /*Função que prepara para o envio dos dados*/
-                callImagem();
-            }
+        builder.setPositiveButton("Sim", (arg0, arg1) -> {
+            /*Função que prepara para o envio dos dados*/
+            callImagem();
         });
 
-        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
-                Toast.makeText(Movimento.this, "Ok!" + arg1, Toast.LENGTH_SHORT).show();
-                /*aqui colocar um sleep antes de voltar para o menu*/
-            }
+        builder.setNegativeButton("Não", (arg0, arg1) -> {
+            /*aqui colocar um sleep antes de voltar para o menu*/
+            Toast.makeText(Movimento.this, "Ok!" + arg1, Toast.LENGTH_SHORT).show();
         });
         alerta = builder.create();
         alerta.show();
@@ -271,5 +200,50 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         startActivity(intent);
     }
 
+    public void OnGuardarMovimento(View view) {
+        /*Aqui guarda os valores em um arquivo json*/
+        JSONObject jObj = new JSONObject();
+
+        try {
+            jObj.put("id_func", id_func.getText().toString());
+            jObj.put("id_desp", id_desp.getText().toString());
+            jObj.put("valor_desp", valor_desp.getText().toString());
+            jObj.put("valor_km", valor_km.getText().toString());
+            jObj.put("obs", obs.getText().toString());
+            jObj.put("dataM", txtDate.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String strJson = jObj.toString();
+        FileOutputStream fos = null;
+
+        /*Nome do arquivo é o funcionário + despesa + data*/
+        final String FILE_NAME = "Func " + id_func.getText().toString() + "- Despesa: " + id_desp.getText().toString() + "- Data: " + txtDate.getText().toString();
+
+        try {
+            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
+            fos.write(strJson.getBytes());
+
+            Toast.makeText(this, "Salvo em  " + getFilesDir() + "/" + FILE_NAME,
+                    Toast.LENGTH_LONG).show();
+
+            // Toast para depois dos testes:
+            // Toast.makeText(this, "Despesa salva!" , Toast.LENGTH_LONG).show();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
 

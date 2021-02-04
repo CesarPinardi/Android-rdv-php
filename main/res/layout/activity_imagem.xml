@@ -7,7 +7,7 @@
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
     android:paddingTop="10dp"
-    android:background="#E0E0E0"
+    android:background="@color/white"
     android:focusable="true"
     android:focusableInTouchMode="true">
     <ScrollView
@@ -19,66 +19,91 @@
             android:orientation="vertical"
             android:id="@+id/linearLayout">
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="11dp" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Upload Image To Server"
-                android:textSize="26dp"
+                android:textAlignment="center"
+                android:text="Enviar imagem"
+                android:textSize="20dp"
                 android:textColor="#000"
                 android:fontFamily="sans-serif"
-                android:paddingBottom="4dp"/>
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="#000"
-                android:layout_marginBottom="10dp">
-            </RelativeLayout>
+                android:paddingBottom="4dp"
+                android:gravity="center_horizontal" />
 
-            <TextView
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="17dp" />
+
+            <LinearLayout
+                android:id="@+id/LinearLayout02"
+                android:layout_width="match_parent"
+                android:layout_height="42dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Identificação da imagem:"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/imageName"
+                    android:layout_width="121dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="22dp" />
+
+            <Button
+                android:id="@+id/buttonSelect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Image Name"
-                android:layout_marginTop="10dp"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageName"/>
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Select Image"
-                android:id="@+id/buttonSelect"
+                android:layout_gravity="center"
                 android:background="#FFF"
-                android:layout_margin="10dp"/>
+                android:text="Selecionar:"
+                android:textSize="13sp" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="22dp" />
 
             <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="270dp"
-                android:id="@+id/imageView"/>
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="#000"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp">
-            </RelativeLayout>
+                android:id="@+id/imageView"
+                android:layout_width="194dp"
+                android:layout_height="291dp"
+                android:layout_gravity="center" />
+
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="right">
-
-                <Button
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:text="Upload >>"
-                    android:textColor="#FFF"
-                    android:background="@color/white"
-                    android:id="@+id/buttonUpload"
-                    android:visibility="gone"/>
+                android:layout_height="18dp"
+                android:gravity="right"
+                android:orientation="horizontal">
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonUpload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:text="Confirmar"
+                android:textColor="#FFF"
+                android:visibility="visible" />
 
         </LinearLayout>
     </ScrollView>

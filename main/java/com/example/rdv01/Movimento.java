@@ -152,7 +152,11 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
 
             builder.setPositiveButton("Sim", (arg0, arg1) -> {
                 /*Função que prepara para o envio dos dados*/
-                callBackground();
+                if(id_desp.getText().toString().equals("")){
+                    builder.setMessage("Erro, campos não preenchidos!");
+                }else {
+                    callBackground();
+                }
             });
 
             builder.setNegativeButton("Não", (arg0, arg1) ->
@@ -196,8 +200,12 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
     }
 
     private void callImagem() {
-        Intent intent = new Intent(this, Imagem.class);
-        startActivity(intent);
+
+        Intent requestLink = new Intent(Movimento.this, Imagem.class);
+        requestLink.putExtra("User", id_func.getText().toString());
+        requestLink.putExtra("Desp", id_desp.getText().toString());
+        startActivity(requestLink);
+
     }
 
     public void OnGuardarMovimento(View view) {

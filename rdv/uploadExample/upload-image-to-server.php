@@ -12,23 +12,26 @@ $conn = new mysqli($servername, $username, $password, $dbname);
  $ImageData = $_POST['image_data'];
  
  $ImageName = $_POST['image_tag'];
+
+ $ImageUser = $_POST['image_user'];
+
+ $ImageDesp = $_POST['image_desp'];
  
  $ImagePath = "uploads/$ImageName.jpg";
  
  $ServerURL = "uploadExample/$ImagePath";
  
- $InsertSQL = "INSERT INTO photos (image_path,image_name) values('$ServerURL','$ImageName')";
+ $InsertSQL = "INSERT INTO photos (image_path,image_name, image_user, image_desp) 
+ values('$ServerURL','$ImageName','$ImageUser','$ImageDesp')";
  
  if(mysqli_query($conn, $InsertSQL)){
 
  file_put_contents($ImagePath,base64_decode($ImageData));
 
- echo "Your Image Has Been Uploaded.";
+ echo "Sua imagem foi enviada!.";
  }
  
  mysqli_close($conn);
  }else{
- echo "Please Try Again";
+ echo "Por favor, tente novamente.";
  }
-
-?>

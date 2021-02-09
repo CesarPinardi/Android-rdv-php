@@ -22,20 +22,66 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="11dp" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Enviar imagem"
-                android:textSize="20dp"
-                android:textColor="#000"
-                android:fontFamily="sans-serif"
-                android:paddingBottom="4dp"
-                android:gravity="center_horizontal" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="17dp" />
+
+            <LinearLayout
+                android:id="@+id/LinearLayout04"
+                android:layout_width="match_parent"
+                android:layout_height="42dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Usuário:"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/usuario"
+                    android:layout_width="121dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/LinearLayout05"
+                android:layout_width="match_parent"
+                android:layout_height="42dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Despesa:"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/desp"
+                    android:layout_width="121dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/LinearLayout02"
@@ -82,8 +128,8 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="194dp"
-                android:layout_height="291dp"
+                android:layout_width="173dp"
+                android:layout_height="257dp"
                 android:layout_gravity="center" />
 
 

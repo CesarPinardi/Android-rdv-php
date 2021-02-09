@@ -29,6 +29,8 @@ public class BackgroundWorker extends AsyncTask <String, Void, String> {
         /*String do banco da vet: */
         String movimento_url = "http://192.168.0.126/rdv/app/movimento_rdv.php";
 
+        /*String do banco de home: */
+        //String movimento_url = "http://192.168.0.58/rdv/app/movimento_rdv.php";
 
         /*String do banco de home: */
         //String movimento_url = "http://192.168.5.234/rdv/app/movimento_rdv.php";
@@ -81,14 +83,12 @@ public class BackgroundWorker extends AsyncTask <String, Void, String> {
 
     @Override
     protected void onPreExecute() {
-        alertDialog = new AlertDialog.Builder(context).create();
-        alertDialog.setTitle("Status:");
+
     }
 
     @Override
     protected void onPostExecute(String result) {
-        alertDialog.setMessage(result);
-        alertDialog.show();
+
     }
 
     @Override

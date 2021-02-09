@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,8 @@ public class Imagem extends AppCompatActivity {
     Button GetImageFromGalleryButton, UploadImageOnServerButton;
 
     ImageView ShowSelectedImage;
+
+    TextView user, desp;
 
     EditText imageName;
 
@@ -88,6 +91,9 @@ public class Imagem extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_imagem);
 
+        user = findViewById(R.id.usuario);
+        desp = findViewById(R.id.desp);
+
         GetImageFromGalleryButton = findViewById(R.id.buttonSelect);
 
         UploadImageOnServerButton = findViewById(R.id.buttonUpload);
@@ -97,6 +103,19 @@ public class Imagem extends AppCompatActivity {
         imageName= findViewById(R.id.imageName);
 
         byteArrayOutputStream = new ByteArrayOutputStream();
+
+        /*Pegando nome do usuario digitado na tela de login*/
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle params = intent.getExtras();
+            if (params != null) {
+                String login = params.getString("User");
+                user.setText(login);
+                String despesa = params.getString("Desp");
+                desp.setText(despesa);
+
+            }
+        }
 
         GetImageFromGalleryButton.setOnClickListener(view -> showPictureDialog());
 
@@ -211,13 +230,24 @@ public class Imagem extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
 
+                String usr = user.getText().toString();
+                String ImageUser = "image_user";
+                String dsp = desp.getText().toString();
+                String ImageDesp = "image_desp";
+
                 ImageProcessClass imageProcessClass = new ImageProcessClass();
 
-                HashMap<String,String> HashMapParams = new HashMap<>();
+                HashMap<String,String> HashMapParams = new HashMap<String, String>();
 
                 HashMapParams.put(ImageTag, GetImageNameFromEditText);
 
                 HashMapParams.put(ImageName, ConvertImage);
+
+                HashMapParams.put(ImageUser,usr);
+
+                HashMapParams.put(ImageDesp,dsp);
+
+                System.out.println("Initial Mappings are: " + HashMapParams);
 
                 return imageProcessClass.ImageHttpRequest("http://192.168.0.126/rdv/uploadExample/upload-image-to-server.php", HashMapParams);
             }
@@ -229,7 +259,7 @@ public class Imagem extends AppCompatActivity {
     public class ImageProcessClass{
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        public String ImageHttpRequest(String requestURL, HashMap<String, String> PData) {
+        public String ImageHttpRequest(String requestURL, HashMap<String,String> PData) {
 
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -311,7 +341,7 @@ public class Imagem extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 5) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Camera foi acessada
+                // Now user should be able to use camera
 
             }
             else {

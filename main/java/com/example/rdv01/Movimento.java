@@ -34,7 +34,7 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
 
     /* declarações para o calendario */
     Button btnDatePicker, btnInsert;
-    EditText txtDate;
+    TextView txtDate;
     private int mYear, mMonth, mDay;
 
     @Override
@@ -152,15 +152,18 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
 
             builder.setPositiveButton("Sim", (arg0, arg1) -> {
                 /*Função que prepara para o envio dos dados*/
-                if(id_desp.getText().toString().equals("")){
-                    builder.setMessage("Erro, campos não preenchidos!");
+                if(id_func.getText().toString().equals("") || id_desp.getText().toString().equals("") ||
+                    valor_desp.getText().toString().equals("") || obs.getText().toString().equals("")){
+                    /*caso algum campo esteja vazio*/
+                    Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+
                 }else {
                     callBackground();
                 }
             });
 
             builder.setNegativeButton("Não", (arg0, arg1) ->
-                    Toast.makeText(Movimento.this, "Dados não enviados" + arg1, Toast.LENGTH_SHORT).show());
+                    Toast.makeText(Movimento.this, "Dados não enviados", Toast.LENGTH_SHORT).show());
             alerta = builder.create();
             alerta.show();
         }
@@ -193,7 +196,7 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
 
         builder.setNegativeButton("Não", (arg0, arg1) -> {
             /*aqui colocar um sleep antes de voltar para o menu*/
-            Toast.makeText(Movimento.this, "Ok!" + arg1, Toast.LENGTH_SHORT).show();
+            Toast.makeText(Movimento.this, "Ok! Despesa enviada sem imagem!", Toast.LENGTH_SHORT).show();
         });
         alerta = builder.create();
         alerta.show();
@@ -201,57 +204,24 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
 
     private void callImagem() {
 
-        Intent requestLink = new Intent(Movimento.this, Imagem.class);
-        requestLink.putExtra("User", id_func.getText().toString());
-        requestLink.putExtra("Desp", id_desp.getText().toString());
-        startActivity(requestLink);
+        Intent img = new Intent(Movimento.this, Imagem.class);
+        img.putExtra("User", id_func.getText().toString());
+        img.putExtra("Desp", id_desp.getText().toString());
+        startActivity(img);
 
     }
 
     public void OnGuardarMovimento(View view) {
         /*Aqui guarda os valores em um arquivo json*/
-        JSONObject jObj = new JSONObject();
+        Intent g = new Intent(Movimento.this, Guardar.class);
+        g.putExtra("Func", id_func.getText().toString());
+        g.putExtra("Desp", id_desp.getText().toString());
+        g.putExtra("ValorDesp", valor_desp.getText().toString());
+        g.putExtra("ValorComb", valor_km.getText().toString());
+        g.putExtra("Obs", obs.getText().toString());
+        g.putExtra("Data", txtDate.getText().toString());
+        startActivity(g);
 
-        try {
-            jObj.put("id_func", id_func.getText().toString());
-            jObj.put("id_desp", id_desp.getText().toString());
-            jObj.put("valor_desp", valor_desp.getText().toString());
-            jObj.put("valor_km", valor_km.getText().toString());
-            jObj.put("obs", obs.getText().toString());
-            jObj.put("dataM", txtDate.getText().toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        String strJson = jObj.toString();
-        FileOutputStream fos = null;
-
-        /*Nome do arquivo é o funcionário + despesa + data*/
-        final String FILE_NAME = "Func " + id_func.getText().toString() + "- Despesa: " + id_desp.getText().toString() + "- Data: " + txtDate.getText().toString();
-
-        try {
-            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
-            fos.write(strJson.getBytes());
-
-            Toast.makeText(this, "Salvo em  " + getFilesDir() + "/" + FILE_NAME,
-                    Toast.LENGTH_LONG).show();
-
-            // Toast para depois dos testes:
-            // Toast.makeText(this, "Despesa salva!" , Toast.LENGTH_LONG).show();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 }
 

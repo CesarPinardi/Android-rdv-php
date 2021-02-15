@@ -9,10 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical"
         android:padding="10dp"
-        android:focusable="true"
         tools:ignore="UselessParent">
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="11dp" />
@@ -27,11 +28,11 @@
                 android:id="@+id/label"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="Usuário:"
+                android:gravity="center_horizontal"
+                android:text="Usuário: "
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:gravity="center_horizontal"
                 tools:ignore="HardcodedText" />
 
             <TextView
@@ -60,10 +61,11 @@
             android:id="@+id/tvLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="  Despesa:"
+            android:text="Despesa:"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
             tools:ignore="HardcodedText" />
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="14dp" />
@@ -90,8 +92,8 @@
                 android:onClick="getSelectedRadioButton"
                 android:text="Combustível"
                 android:visibility="visible"
-                tools:visibility="visible"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText"
+                tools:visibility="visible" />
 
             <RadioButton
                 android:id="@+id/rbEstacionamento"
@@ -136,23 +138,23 @@
                 android:id="@+id/labelDesp"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:text="Valor da Despesa:"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="17sp"
-                android:gravity="center_horizontal"
                 tools:ignore="HardcodedText" />
 
             <EditText
                 android:id="@+id/etValorDesp"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
+                android:gravity="center_horizontal"
+                android:importantForAutofill="no"
                 android:inputType="number"
                 android:textAlignment="center"
-                android:textSize="18sp"
-                android:gravity="center_horizontal"
                 android:textColor="@color/black"
-                android:importantForAutofill="no"
+                android:textSize="18sp"
                 tools:ignore="LabelFor" />
 
         </LinearLayout>
@@ -172,23 +174,23 @@
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 android:visibility="invisible"
-                tools:visibility="invisible"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText"
+                tools:visibility="invisible" />
 
             <EditText
                 android:id="@+id/etValorKm"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
-                android:inputType="number"
-                android:textSize="17sp"
-                android:textAlignment="center"
-                android:text="0"
-                android:visibility="invisible"
-                tools:visibility="invisible"
                 android:gravity="center_horizontal"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:text="0"
+                android:textAlignment="center"
                 android:textColor="@color/black"
+                android:textSize="17sp"
+                android:visibility="invisible"
                 tools:ignore="HardcodedText,LabelFor"
-                android:importantForAutofill="no" />
+                tools:visibility="invisible" />
 
         </LinearLayout>
 
@@ -201,11 +203,11 @@
                 android:id="@+id/labelObs"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:text="Observação:"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="17sp"
-                android:gravity="center_horizontal"
                 tools:ignore="HardcodedText" />
 
             <EditText
@@ -213,11 +215,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:gravity="center_horizontal"
+                android:importantForAutofill="no"
                 android:inputType="text"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:importantForAutofill="no"
                 tools:ignore="LabelFor" />
 
         </LinearLayout>
@@ -231,27 +233,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btn_date"
-                android:layout_width="169dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Selecionar data"
-                android:textSize="13sp"
-                tools:ignore="HardcodedText" />
-
             <Space
                 android:layout_width="15dp"
                 android:layout_height="50dp" />
 
-            <EditText
+            <Button
+                android:id="@+id/btn_date"
+                android:layout_width="132dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="data"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText" />
+
+            <Space
+                android:layout_width="28dp"
+                android:layout_height="50dp" />
+
+            <TextView
                 android:id="@+id/in_date"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:inputType="date"
+                android:hint="Data"
                 android:importantForAutofill="no"
-                tools:ignore="LabelFor" />
+                android:textColor="@color/black"
+                android:textSize="19sp"
+                tools:ignore="HardcodedText,LabelFor" />
 
         </LinearLayout>
 
@@ -262,24 +270,29 @@
         <LinearLayout
             android:id="@+id/LinearLayout07"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/btnInsertMov"
-                android:layout_width="166dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:onClick="OnEnviarMovimento"
                 android:text="Enviar"
                 tools:ignore="HardcodedText" />
 
             <Space
-                android:layout_width="19dp"
-                android:layout_height="match_parent" />
+                android:layout_width="match_parent"
+                android:layout_height="12dp" />
 
             <Button
                 android:id="@+id/btnGuardaMov"
-                android:layout_width="match_parent"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:onClick="OnGuardarMovimento"
                 android:text="Guardar"
                 tools:ignore="HardcodedText" />

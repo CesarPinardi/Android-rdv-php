@@ -1,78 +1,121 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+package com.example.rdv01;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Toast;
 
-    <LinearLayout
-        android:layout_width="382dp"
-        android:layout_height="434dp"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="vertical"
-        android:padding="10dp"
-        tools:ignore="UselessParent">
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
-        <EditText
-            android:id="@+id/etUserName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textSize="25sp"
-            android:importantForAutofill="no"
-            tools:ignore="HardcodedText,LabelFor" />
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:textSize="25sp"
-            tools:ignore="HardcodedText,LabelFor"
-            android:importantForAutofill="no" />
+import org.json.JSONException;
+import org.json.JSONObject;
 
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Mostrar senha"
-            tools:ignore="HardcodedText" />
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="14dp" />
+import static android.widget.Toast.makeText;
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:layout_gravity="center"
-            android:textSize="23sp"
-            tools:ignore="HardcodedText" />
+public class MainActivity extends AppCompatActivity {
+    EditText userEt, passEt;
+    Button login, limpar;
+    CheckBox checkbox, checkbox2;
+    private RequestQueue requestQueue;
+    /*String para o banco*/
+    private static final String URL = "http://192.168.0.91/rdv/app/user_control.php";
+    private StringRequest request;
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="13dp" />
+    @SuppressLint("ShowToast")
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        userEt = findViewById(R.id.etUserName);
+        passEt = findViewById(R.id.etPassword);
+        login = findViewById(R.id.btnLogin);
+        limpar = findViewById(R.id.btnLimpar);
+        checkbox = findViewById(R.id.checkBox);
+        checkbox2 = findViewById(R.id.checkBox2);
 
-        <Button
-            android:id="@+id/btnLimpar"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:text="Limpar"
-            android:layout_gravity="center"
-            android:textSize="23sp"
-            tools:ignore="HardcodedText" />
+        checkbox.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if (isChecked) {
+                // mostra password
+                passEt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            } else {
+                // esconde password
+                passEt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            }
+        });
 
-    </LinearLayout>
+        checkbox2.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if (isChecked) {
+                // caso o usuario queira entrar offline
+                Intent i = new Intent(MainActivity.this,Guardar.class);
+                passEt.getText().clear();
+                userEt.getText().clear();
+                userEt.getFocusable();
+                makeText(this,"Entrando offline...", Toast.LENGTH_SHORT);
+                /*aqui colocar um sleep*/
+                startActivity(i);
+                /*ir direto para a classe de guardar (ja está offline mesmo)*/
+            }
+        });
 
+        /*Intent para ir para a outra activity*/
+        Intent i = new Intent(MainActivity.this,Movimento.class);
 
+        requestQueue = Volley.newRequestQueue(this);
+        /*quando clickar em login, chama a função (no php) para login/register */
+        login.setOnClickListener(v -> {
 
-</RelativeLayout>
+            request = new StringRequest(Request.Method.POST, URL, response -> {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if(Objects.requireNonNull(jsonObject.names()).get(0).equals("success")){
+
+                        Bundle params = new Bundle();
+                        /*Enviar o valor do editText para a próxima activity*/
+                        params.putString("loginUser", userEt.getText().toString());
+                        i.putExtras(params);
+                        /*Assim que passar, vai para a outra activity*/
+                        startActivity(i);
+
+                    } else {
+                            if(Objects.requireNonNull(jsonObject.names()).get(0).equals("error")){
+                                makeText(getApplicationContext(), "Error" + jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                            }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }, error -> {
+
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    HashMap<String,String> hashMap = new HashMap<>();
+                    hashMap.put("username", userEt.getText().toString());
+                    hashMap.put("password", passEt.getText().toString());
+                    return hashMap;
+                }
+            };
+            requestQueue.add(request);
+        });
+
+    }
+
+}

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,7 +17,8 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="10dp"
+        tools:ignore="UselessParent">
 
         <EditText
             android:id="@+id/etUserName"
@@ -26,7 +26,9 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:text="teste"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:importantForAutofill="no"
+            tools:ignore="HardcodedText,LabelFor" />
 
         <EditText
             android:id="@+id/etPassword"
@@ -34,13 +36,16 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:text="teste"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            tools:ignore="HardcodedText,LabelFor"
+            android:importantForAutofill="no" />
 
         <CheckBox
             android:id="@+id/checkBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mostrar senha" />
+            android:text="Mostrar senha"
+            tools:ignore="HardcodedText" />
 
         <Space
             android:layout_width="match_parent"
@@ -52,7 +57,8 @@
             android:layout_height="wrap_content"
             android:text="Login"
             android:layout_gravity="center"
-            android:textSize="23sp" />
+            android:textSize="23sp"
+            tools:ignore="HardcodedText" />
 
         <Space
             android:layout_width="match_parent"
@@ -64,7 +70,8 @@
             android:layout_height="wrap_content"
             android:text="Limpar"
             android:layout_gravity="center"
-            android:textSize="23sp" />
+            android:textSize="23sp"
+            tools:ignore="HardcodedText" />
 
     </LinearLayout>
 

@@ -1,6 +1,6 @@
 package com.example.rdv01;
 
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -16,9 +16,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+@SuppressLint("StaticFieldLeak")
 public class BackgroundWorker extends AsyncTask <String, Void, String> {
     Context context;
-    AlertDialog alertDialog;
+
     BackgroundWorker (Context ctx) {
         context = ctx;
     }
@@ -26,15 +27,8 @@ public class BackgroundWorker extends AsyncTask <String, Void, String> {
     protected String doInBackground(String... params) {
         String type = params[0];
 
-        /*String do banco da vet: */
-        String movimento_url = "http://192.168.0.126/rdv/app/movimento_rdv.php";
-
-        /*String do banco de home: */
-        //String movimento_url = "http://192.168.0.58/rdv/app/movimento_rdv.php";
-
-        /*String do banco de home: */
-        //String movimento_url = "http://192.168.5.234/rdv/app/movimento_rdv.php";
-
+        /*String banco */
+        String movimento_url = "http://192.168.0.91/rdv/app/movimento_rdv.php";
 
         if(type.equals("regMov")) {
             try {

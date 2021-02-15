@@ -237,7 +237,7 @@ public class Imagem extends AppCompatActivity {
 
                 ImageProcessClass imageProcessClass = new ImageProcessClass();
 
-                HashMap<String,String> HashMapParams = new HashMap<String, String>();
+                HashMap<String,String> HashMapParams = new HashMap<>();
 
                 HashMapParams.put(ImageTag, GetImageNameFromEditText);
 
@@ -249,7 +249,7 @@ public class Imagem extends AppCompatActivity {
 
                 System.out.println("Initial Mappings are: " + HashMapParams);
 
-                return imageProcessClass.ImageHttpRequest("http://192.168.0.126/rdv/uploadExample/upload-image-to-server.php", HashMapParams);
+                return imageProcessClass.ImageHttpRequest("http://192.168.0.91/rdv/uploadExample/upload-image-to-server.php", HashMapParams);
             }
         }
         AsyncTaskUploadClass AsyncTaskUploadClassOBJ = new AsyncTaskUploadClass();

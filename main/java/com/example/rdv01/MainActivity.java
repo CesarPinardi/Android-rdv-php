@@ -6,7 +6,6 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     CheckBox checkbox;
     private RequestQueue requestQueue;
     /*String para o banco*/
-    private static final String URL = "http://192.168.0.126/rdv/app/user_control.php";
+    private static final String URL = "http://192.168.0.91/rdv/app/user_control.php";
     private StringRequest request;
 
     @Override

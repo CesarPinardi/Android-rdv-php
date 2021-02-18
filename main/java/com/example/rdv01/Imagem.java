@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -86,6 +87,7 @@ public class Imagem extends AppCompatActivity {
     private final int GALLERY = 1;
     private final int CAMERA = 2;
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,19 +140,16 @@ public class Imagem extends AppCompatActivity {
 
     private void showPictureDialog(){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        pictureDialog.setTitle("Selecione uma ação");
+        pictureDialog.setTitle("Selecione uma imagem da galeria clicando logo abaixo:");
         String[] pictureDialogItems = {
-                "Galeria de fotos",
-                "Camera" };
+                "Galeria de fotos"};
         pictureDialog.setItems(pictureDialogItems,
                 (dialog, which) -> {
                     switch (which) {
                         case 0:
                             choosePhotoFromGallary();
                             break;
-                        case 1:
-                            takePhotoFromCamera();
-                            break;
+
                     }
                 });
         pictureDialog.show();
@@ -163,9 +162,11 @@ public class Imagem extends AppCompatActivity {
     }
 
     private void takePhotoFromCamera() {
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA);
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -179,6 +180,8 @@ public class Imagem extends AppCompatActivity {
                 Uri contentURI = data.getData();
                 try {
                     FixBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    Log.e("Gallery dimensions", FixBitmap.getWidth()+" "+FixBitmap.getHeight());
+
                     ShowSelectedImage.setImageBitmap(FixBitmap);
                     UploadImageOnServerButton.setVisibility(View.VISIBLE);
 
@@ -191,14 +194,18 @@ public class Imagem extends AppCompatActivity {
         } else if (requestCode == CAMERA) {
             FixBitmap = (Bitmap) data.getExtras().get("data");
             ShowSelectedImage.setImageBitmap(FixBitmap);
+            Log.e("Camera dimensions", FixBitmap.getWidth()+" "+FixBitmap.getHeight());
+
             UploadImageOnServerButton.setVisibility(View.VISIBLE);
         }
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     public void UploadImageToServer(){
 
-        FixBitmap.compress(Bitmap.CompressFormat.JPEG, 40, byteArrayOutputStream);
+        FixBitmap.compress(Bitmap.CompressFormat.JPEG, 100 ,byteArrayOutputStream);
+        Log.e("Compressed dimensions", FixBitmap.getWidth()+" "+FixBitmap.getHeight());
 
         byteArray = byteArrayOutputStream.toByteArray();
 

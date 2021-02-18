@@ -114,19 +114,42 @@
 
             </LinearLayout>
 
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="20dp" />
 
-            <Button
-                android:id="@+id/buttonSelect"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:background="#FFF"
-                android:text="Selecionar:"
-                android:textSize="13sp"
-                tools:ignore="HardcodedText" />
+            <LinearLayout
+                android:id="@+id/LinearLayout0"
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonSelect"
+                    android:layout_width="140dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="#FFF"
+                    android:text="Selecionar"
+                    android:textSize="13sp"
+                    tools:ignore="HardcodedText" />
+
+                <Space
+                    android:layout_width="58dp"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/buttonUpload"
+                    android:layout_width="140dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@color/white"
+                    android:text="Confirmar"
+                    android:visibility="visible"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"
@@ -134,25 +157,13 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="173dp"
-                android:layout_height="257dp"
+                android:layout_width="match_parent"
+                android:layout_height="358dp"
                 android:layout_gravity="center"
                 android:contentDescription="Imagem"
+                android:rotation="+90"
                 tools:ignore="HardcodedText" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <Button
-                android:id="@+id/buttonUpload"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:background="@color/white"
-                android:text="Confirmar"
-                android:visibility="visible"
-                tools:ignore="HardcodedText" />
 
         </LinearLayout>
     </ScrollView>

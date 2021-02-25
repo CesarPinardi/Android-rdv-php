@@ -1,8 +1,11 @@
 package com.example.rdv01;
 
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,24 +18,26 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
 public class BackgroundWorker extends AsyncTask<String, Void, String> {
+    @SuppressLint("StaticFieldLeak")
     Context context;
-    AlertDialog alertDialog;
 
     BackgroundWorker(Context ctx) {
         context = ctx;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected String doInBackground(String... params) {
         String type = params[0];
 
         /* String banco */
-        String movimento_url = "http://189.1.174.107:8080/app/movimento_rdv.php";
+        String movimento_url = "";
 
         if (type.equals("regMov")) {
             try {
@@ -42,34 +47,36 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 String valor_km = params[4];
                 String obs = params[5];
                 String dataM = params[6];
+                String status = params[7];
                 URL url = new URL(movimento_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
                 String post_data = URLEncoder.encode("id_func", "UTF-8") + "=" + URLEncoder.encode(id_func, "UTF-8")
                         + "&" + URLEncoder.encode("id_desp", "UTF-8") + "=" + URLEncoder.encode(id_desp, "UTF-8") + "&"
                         + URLEncoder.encode("valor_desp", "UTF-8") + "=" + URLEncoder.encode(valor_desp, "UTF-8") + "&"
                         + URLEncoder.encode("valor_km", "UTF-8") + "=" + URLEncoder.encode(valor_km, "UTF-8") + "&"
                         + URLEncoder.encode("obs", "UTF-8") + "=" + URLEncoder.encode(obs, "UTF-8") + "&"
-                        + URLEncoder.encode("dataM", "UTF-8") + "=" + URLEncoder.encode(dataM, "UTF-8") + "&";
+                        + URLEncoder.encode("dataM", "UTF-8") + "=" + URLEncoder.encode(dataM, "UTF-8") + "&"
+                        + URLEncoder.encode("status", "UTF-8") + "=" + URLEncoder.encode(status, "UTF-8") + "&";
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();
                 bufferedWriter.close();
                 outputStream.close();
                 InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-                String result = "";
-                String line = "";
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.ISO_8859_1));
+                StringBuilder result = new StringBuilder();
+                String line;
                 while ((line = bufferedReader.readLine()) != null) {
-                    result += line;
+                    result.append(line);
                 }
                 bufferedReader.close();
                 inputStream.close();
                 httpURLConnection.disconnect();
-                return result;
+                return result.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {

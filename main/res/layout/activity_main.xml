@@ -1,80 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
     <LinearLayout
-        android:layout_width="382dp"
-        android:layout_height="434dp"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="vertical"
-        android:padding="10dp"
-        tools:ignore="UselessParent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/etUserName"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:text="teste"
-            android:textSize="25sp"
-            android:importantForAutofill="no"
-            tools:ignore="HardcodedText,LabelFor" />
+            android:layout_height="200dp"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/etPassword"
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="28dp">
+
+            </Space>
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="132dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/icone" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:text="teste"
-            android:textSize="25sp"
-            tools:ignore="HardcodedText,LabelFor"
-            android:importantForAutofill="no" />
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:padding="10dp"
+            tools:ignore="UselessParent">
 
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Mostrar senha"
-            tools:ignore="HardcodedText" />
+            <EditText
+                android:id="@+id/etUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:textSize="25sp"
+                tools:ignore="HardcodedText,LabelFor" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="14dp" />
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:textSize="25sp"
+                tools:ignore="HardcodedText,LabelFor" />
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:layout_gravity="center"
-            android:textSize="23sp"
-            tools:ignore="HardcodedText" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="13dp" />
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mostrar senha"
+                tools:ignore="HardcodedText" />
 
-        <Button
-            android:id="@+id/btnLimpar"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:text="Limpar"
-            android:layout_gravity="center"
-            android:textSize="23sp"
-            tools:ignore="HardcodedText" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Login"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="13dp" />
+
+            <Button
+                android:id="@+id/btnLimpar"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Limpar"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
-
-
 
 </RelativeLayout>

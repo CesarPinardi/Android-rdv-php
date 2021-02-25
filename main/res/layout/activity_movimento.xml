@@ -3,302 +3,299 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
     tools:context=".Movimento">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:padding="10dp"
         tools:ignore="UselessParent">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="11dp" />
-
         <LinearLayout
-            android:id="@+id/LinearLayout02"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <TextView
-                android:id="@+id/label"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Usuário: "
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/etFunc"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvResult"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:text=""
-            android:textSize="18sp"
-            android:visibility="invisible" />
-
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="14dp" />
-
-        <TextView
-            android:id="@+id/tvLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Despesa:"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            tools:ignore="HardcodedText" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="14dp" />
-
-
-        <RadioGroup
-            android:id="@+id/rg_despesas"
-            android:layout_width="match_parent"
-            android:layout_height="186dp"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/rbAlim"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:onClick="getSelectedRadioButton"
-                android:text="Alimentação"
-                tools:ignore="HardcodedText" />
-
-            <RadioButton
-                android:id="@+id/rbComb"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:onClick="getSelectedRadioButton"
-                android:text="Combustível"
-                android:visibility="visible"
-                tools:ignore="HardcodedText"
-                tools:visibility="visible" />
-
-            <RadioButton
-                android:id="@+id/rbEstacionamento"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:onClick="getSelectedRadioButton"
-                android:text="Estacionamento"
-                tools:ignore="HardcodedText" />
-
-            <RadioButton
-                android:id="@+id/rbHospedagem"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:onClick="getSelectedRadioButton"
-                android:text="Hospedagem"
-                tools:ignore="HardcodedText" />
-
-            <RadioButton
-                android:id="@+id/rbOutros"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:onClick="getSelectedRadioButton"
-                android:text="Outros"
-                tools:ignore="HardcodedText" />
-
-            <RadioButton
-                android:id="@+id/rbPedagio"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:onClick="getSelectedRadioButton"
-                android:text="Pedágio"
-                tools:ignore="HardcodedText" />
-
-        </RadioGroup>
-
-        <LinearLayout
-            android:id="@+id/LinearLayout03"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/labelDesp"
-                android:layout_width="175dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Valor da Despesa:"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                tools:ignore="HardcodedText" />
-
-            <EditText
-                android:id="@+id/etValorDesp"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:gravity="center_horizontal"
-                android:importantForAutofill="no"
-                android:inputType="number"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                tools:ignore="LabelFor" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/LinearLayout04"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/labelKm"
-                android:layout_width="175dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Valor do Combustível:"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                android:visibility="invisible"
-                tools:ignore="HardcodedText"
-                tools:visibility="invisible" />
-
-            <EditText
-                android:id="@+id/etValorKm"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:gravity="center_horizontal"
-                android:importantForAutofill="no"
-                android:inputType="number"
-                android:text="0"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                android:visibility="invisible"
-                tools:ignore="HardcodedText,LabelFor"
-                tools:visibility="invisible" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/LinearLayout05"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/labelObs"
-                android:layout_width="175dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Observação:"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                tools:ignore="HardcodedText" />
-
-            <EditText
-                android:id="@+id/etObs"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:gravity="center_horizontal"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                tools:ignore="LabelFor" />
-
-        </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="16dp" />
-
-        <LinearLayout
-            android:id="@+id/LinearLayout06"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:padding="10dp"
+            tools:ignore="UselessParent">
 
             <Space
-                android:layout_width="15dp"
-                android:layout_height="50dp" />
+                android:layout_width="match_parent"
+                android:layout_height="11dp" />
 
-            <Button
-                android:id="@+id/btn_date"
-                android:layout_width="132dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="data"
-                android:textSize="13sp"
-                tools:ignore="HardcodedText" />
+            <LinearLayout
+                android:id="@+id/LinearLayout02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/label"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Usuário: "
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    tools:ignore="HardcodedText" />
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/etFunc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    tools:ignore="LabelFor" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LinearLayout22"
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/tvLabel"
+                    android:layout_width="81dp"
+                    android:layout_height="match_parent"
+                    android:text="Despesa:"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/tvResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:visibility="invisible" />
+
+
+            </LinearLayout>
             <Space
-                android:layout_width="28dp"
-                android:layout_height="50dp" />
-
-            <TextView
-                android:id="@+id/in_date"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:hint="Data"
-                android:importantForAutofill="no"
-                android:textColor="@color/black"
-                android:textSize="19sp"
-                tools:ignore="HardcodedText,LabelFor" />
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="16dp" />
+                </Space>
 
-        <LinearLayout
-            android:id="@+id/LinearLayout07"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                <Spinner
+                    android:id="@+id/spinner2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <Button
-                android:id="@+id/btnInsertMov"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:onClick="OnEnviarMovimento"
-                android:text="Enviar"
-                tools:ignore="HardcodedText" />
+            </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="12dp" />
+                android:layout_height="10dp" />
+            <LinearLayout
+                android:id="@+id/LinearLayout03"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btnGuardaMov"
-                android:layout_width="150dp"
+                <TextView
+                    android:id="@+id/labelDesp"
+                    android:layout_width="175dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Valor da Despesa:"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    tools:ignore="HardcodedText" />
+
+                <EditText
+                    android:id="@+id/etValorDesp"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:gravity="center_horizontal"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    tools:ignore="LabelFor" />
+
+            </LinearLayout>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+            <LinearLayout
+                android:id="@+id/LinearLayout04"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/labelKm"
+                    android:layout_width="175dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Valor do Combustível:"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:visibility="invisible"
+                    tools:ignore="HardcodedText"
+                    tools:visibility="invisible" />
+
+                <EditText
+                    android:id="@+id/etValorKm"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:gravity="center_horizontal"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:visibility="invisible"
+                    tools:ignore="HardcodedText,LabelFor"
+                    tools:visibility="invisible" />
+
+            </LinearLayout>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+            <LinearLayout
+                android:id="@+id/LinearLayout05"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/labelObs"
+                    android:layout_width="175dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Observação:"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    tools:ignore="HardcodedText" />
+
+                <EditText
+                    android:id="@+id/etObs"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:gravity="center_horizontal"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    tools:ignore="LabelFor" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:id="@+id/LinearLayout06"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Space
+                    android:layout_width="15dp"
+                    android:layout_height="50dp" />
+
+                <Button
+                    android:id="@+id/btn_date"
+                    android:layout_width="132dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="data"
+                    android:textSize="13sp"
+                    tools:ignore="HardcodedText" />
+
+                <Space
+                    android:layout_width="28dp"
+                    android:layout_height="50dp" />
+
+                <EditText
+                    android:id="@+id/in_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:gravity="center"
+                    android:hint="ano/mes/dia"
+                    android:importantForAutofill="no"
+                    android:inputType="date"
+                    android:textColor="@color/black"
+                    android:textSize="19sp"
+                    tools:ignore="HardcodedText,LabelFor" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:id="@+id/LinearLayout07"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:onClick="OnGuardarMovimento"
-                android:text="Guardar"
-                tools:ignore="HardcodedText" />
+                android:orientation="vertical">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
+                <Button
+                    android:id="@+id/btnInsertMov"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:onClick="OnEnviarMovimento"
+                    android:text="Enviar"
+                    tools:ignore="HardcodedText" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
+                <Button
+                    android:id="@+id/btnVoltar"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:onClick="OnVoltar"
+                    android:text="Voltar"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

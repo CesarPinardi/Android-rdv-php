@@ -49,7 +49,9 @@
                     android:layout_gravity="center"
                     android:inputType="text"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:autofillHints="user"
+                    tools:ignore="LabelFor" />
 
             </LinearLayout>
 
@@ -79,7 +81,9 @@
                     android:layout_gravity="center"
                     android:inputType="text"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:autofillHints="despesa"
+                    tools:ignore="LabelFor" />
 
             </LinearLayout>
 

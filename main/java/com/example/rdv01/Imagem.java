@@ -43,65 +43,39 @@ import javax.net.ssl.HttpsURLConnection;
 public class Imagem extends AppCompatActivity {
 
     Button GetImageFromGalleryButton, UploadImageOnServerButton;
-
     ImageView ShowSelectedImage;
-
     TextView user, desp;
-
     EditText imageName;
-
     Bitmap FixBitmap;
-
     String ImageTag =   "image_tag";
-
     String ImageName = "image_data";
-
     ProgressDialog progressDialog;
-
     ByteArrayOutputStream byteArrayOutputStream;
-
     byte[] byteArray;
-
     String ConvertImage;
-
     String GetImageNameFromEditText;
-
     HttpURLConnection httpURLConnection;
-
     URL url;
-
     OutputStream outputStream;
-
     BufferedWriter bufferedWriter;
-
     int RC;
-
     BufferedReader bufferedReader;
-
     StringBuilder stringBuilder;
-
     boolean check = true;
-
     private final int GALLERY = 1;
-    private final int CAMERA = 2;
 
     @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_imagem);
-
+        /*associando os campos*/
         user = findViewById(R.id.usuario);
         desp = findViewById(R.id.desp);
-
         GetImageFromGalleryButton = findViewById(R.id.buttonSelect);
-
         UploadImageOnServerButton = findViewById(R.id.buttonUpload);
-
         ShowSelectedImage = findViewById(R.id.imageView);
-
         imageName = findViewById(R.id.imageName);
-
         byteArrayOutputStream = new ByteArrayOutputStream();
 
         /* Pegando nome do usuario digitado na tela de login */
@@ -117,12 +91,13 @@ public class Imagem extends AppCompatActivity {
             }
         }
 
+        /*quando clicar no botão, mostra o Dialog*/
         GetImageFromGalleryButton.setOnClickListener(view -> showPictureDialog());
 
+        /*quando clicar chama a funcao para upar a imagem para o servidor*/
         UploadImageOnServerButton.setOnClickListener(view -> {
-
+            /*nome da imagem para ser upada*/
             GetImageNameFromEditText = imageName.getText().toString();
-
             UploadImageToServer();
 
         });
@@ -135,16 +110,15 @@ public class Imagem extends AppCompatActivity {
         String[] pictureDialogItems = { "Galeria de fotos" };
         pictureDialog.setItems(pictureDialogItems, (dialog, which) -> {
             if (which == 0) {
-                choosePhotoFromGallary();
+                choosePhotoFromGallery();
             }
         });
         pictureDialog.show();
     }
 
-    public void choosePhotoFromGallary() {
+    public void choosePhotoFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
         startActivityForResult(galleryIntent, GALLERY);
     }
 
@@ -171,30 +145,21 @@ public class Imagem extends AppCompatActivity {
                 }
             }
 
-        } else if (requestCode == CAMERA) {
-            FixBitmap = (Bitmap) data.getExtras().get("data");
-            ShowSelectedImage.setImageBitmap(FixBitmap);
-            Log.e("Camera dimensions", FixBitmap.getWidth() + " " + FixBitmap.getHeight());
-
-            UploadImageOnServerButton.setVisibility(View.VISIBLE);
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     public void UploadImageToServer() {
 
-        FixBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        Log.e("Compressed dimensions", FixBitmap.getWidth() + " " + FixBitmap.getHeight());
-
         byteArray = byteArrayOutputStream.toByteArray();
 
         ConvertImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
         if (imageName.getText().toString().equals("")) {
-            Toast.makeText(Imagem.this, "Coloque um nome para a imagem!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Imagem.this, "Insira um nome para a imagem!", Toast.LENGTH_SHORT).show();
             imageName.getFocusable();
         } else if (user.getText().toString().equals("") || desp.getText().toString().equals("")) {
             Toast.makeText(Imagem.this, "Não é possível enviar imagem sem estar logado!", Toast.LENGTH_SHORT).show();
-            Toast.makeText(Imagem.this, "Voltando para logar...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Imagem.this, "Voltando para a tela inicial...", Toast.LENGTH_SHORT).show();
             new Handler().postDelayed(() -> {
                 Intent i = new Intent(this, Movimento.class);
                 startActivity(i);
@@ -249,7 +214,7 @@ public class Imagem extends AppCompatActivity {
                     System.out.println("Initial Mappings are: " + HashMapParams);
 
                     return imageProcessClass.ImageHttpRequest(
-                            "http://189.1.174.107:8080/app/upload/upload-image-to-server.php", HashMapParams);
+                            "", HashMapParams);
 
                 }
             }

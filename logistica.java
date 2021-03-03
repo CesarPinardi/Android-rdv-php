@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void takePhotoFromCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+       
         startActivityForResult(intent, CAMERA);
     }
 

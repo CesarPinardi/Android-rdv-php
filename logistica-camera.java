@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
         outraimagem.setOnClickListener(view -> enviarOutraImagem());
 
-        GetImageFromGalleryButton.setOnClickListener(view -> showPictureDialog());
+        GetImageFromGalleryButton.setOnClickListener(view -> abrirCamera());
 
         String currentDateTimeString = java.text.DateFormat.getDateInstance().format(new Date());
 
@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         /* ao enviar outra imagem, reseta a activity*/
         AlertDialog alerta;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("");
         builder.setMessage("Preparando para enviar outra imagem...");
         alerta = builder.create();
         alerta.show();
@@ -169,23 +170,13 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = getIntent();
             finish();
             startActivity(intent);
-            }, 3000);
+            }, 2500);
     }
 
-    private void showPictureDialog(){
+    private void abrirCamera(){
         /*mostrando a caixa para clicar na camera*/
-        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        pictureDialog.setTitle("Clique abaixo para abrir a camera: ");
-        String[] pictureDialogItems = {
-                "Camera" };
-        pictureDialog.setItems(pictureDialogItems,
-                (dialog, which) -> {
-                    if (which == 0) {
-                        takePhotoFromCamera();
-                    }
-                });
-        pictureDialog.show();
-    }
+        takePhotoFromCamera();
+      }
 
     @SuppressLint("QueryPermissionsNeeded")
     private void takePhotoFromCamera() {

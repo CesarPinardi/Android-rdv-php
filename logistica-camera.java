@@ -12,12 +12,13 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -25,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -38,13 +40,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
+
 public class MainActivity extends AppCompatActivity {
 
     Button GetImageFromGalleryButton, UploadImageOnServerButton;
@@ -85,10 +91,11 @@ public class MainActivity extends AppCompatActivity {
 
     boolean check = true;
 
-    private final int GALLERY = 1, CAMERA = 0;
-
     TextView tv;
+
     private String currentPhotoPath;
+
+    Button outraimagem;
 
     @SuppressLint({"SimpleDateFormat", "SetTextI18n"})
     @Override
@@ -102,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
         cpf = findViewById(R.id.et_cpf);
         tv = findViewById(R.id.textview);
 
+        outraimagem = findViewById(R.id.btnOutraImagem);
+
         GetImageFromGalleryButton = findViewById(R.id.buttonSelect);
 
         UploadImageOnServerButton = findViewById(R.id.buttonUpload);
@@ -111,15 +120,10 @@ public class MainActivity extends AppCompatActivity {
         byteArrayOutputStream = new ByteArrayOutputStream();
 
         /*Pegando nome do usuario digitado na tela de login*/
-        Intent intent = getIntent();
-        if (intent != null) {
-            Bundle params = intent.getExtras();
-            if (params != null) {
-                String login = params.getString("loginUser");
-                user.setText(login);
-            }
-        }
 
+        pegarUsuario();
+
+        outraimagem.setOnClickListener(view -> enviarOutraImagem());
 
         GetImageFromGalleryButton.setOnClickListener(view -> showPictureDialog());
 
@@ -127,9 +131,8 @@ public class MainActivity extends AppCompatActivity {
 
         UploadImageOnServerButton.setOnClickListener(view -> {
             tv.setText(cpf.getText().toString() + " - " + currentDateTimeString);
-            setPic();
             GetImageNameFromEditText = tv.getText().toString();
-
+            setPic();
             UploadImageToServer();
 
         });
@@ -142,31 +145,45 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void pegarUsuario() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle params = intent.getExtras();
+            if (params != null) {
+                String login = params.getString("loginUser");
+                user.setText(login);
+            }
+        }
+    }
+
+    private void enviarOutraImagem() {
+        AlertDialog alerta;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Preparando para enviar outra imagem...");
+        alerta = builder.create();
+        alerta.show();
+        new Handler().postDelayed(() -> {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+            }, 3000);
+
+    }
+
     private void showPictureDialog(){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        pictureDialog.setTitle("Escolha uma imagem a partir da galeria de fotos: ");
+        pictureDialog.setTitle("Clique abaixo para abrir a camera: ");
         String[] pictureDialogItems = {
-                "Photo Gallery",
                 "Camera" };
         pictureDialog.setItems(pictureDialogItems,
                 (dialog, which) -> {
-                    switch (which) {
-                        case 0:
-                            choosePhotoFromGallery();
-                            break;
-                        case 1:
-                            takePhotoFromCamera();
-                            break;
+                    if (which == 0) {
+                        takePhotoFromCamera();
                     }
                 });
         pictureDialog.show();
     }
-    public void choosePhotoFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-        startActivityForResult(galleryIntent, GALLERY);
-    }
     @SuppressLint("QueryPermissionsNeeded")
     private void takePhotoFromCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -186,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                         "com.example.logistica",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                int CAMERA = 0;
                 startActivityForResult(takePictureIntent, CAMERA);
             }
         }
@@ -215,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
         galleryAddPic();
         return image;
     }
+
     private void setPic() {
         // Get the dimensions of the View
         int targetW = ShowSelectedImage.getWidth();
@@ -244,6 +263,8 @@ public class MainActivity extends AppCompatActivity {
         FixBitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
         byteArray = byteArrayOutputStream.toByteArray();
         ConvertImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        final AlertDialog[] alerta = new AlertDialog[1];
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
 
         @SuppressLint("StaticFieldLeak")
@@ -264,7 +285,19 @@ public class MainActivity extends AppCompatActivity {
 
                 progressDialog.dismiss();
 
-                Toast.makeText(MainActivity.this,string1,Toast.LENGTH_LONG).show();
+                makeText(MainActivity.this,string1, LENGTH_SHORT).show();
+                builder.setMessage("Deseja enviar outra imagem?");
+                builder.setPositiveButton("Sim", (dialog, which) -> {
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                });
+                builder.setNegativeButton("Não", (dialog, which) ->
+                        makeText(MainActivity.this,"Clique no botão acima para enviar " +
+                                "outra imagem a qualquer momento!", LENGTH_SHORT).show());
+                alerta[0] = builder.create();
+                alerta[0].show();
+                outraimagem.setVisibility(View.VISIBLE);
 
             }
 
@@ -294,9 +327,13 @@ public class MainActivity extends AppCompatActivity {
                 return imageProcessClass.ImageHttpRequest("http://192.168.0.105/rdv/uploadExample/upload-image-to-server.php", HashMapParams);
                 //return imageProcessClass.ImageHttpRequest("http://189.1.174.107:8080/app/upload/upload-image-to-server.php", HashMapParams);
             }
+
         }
+
         AsyncTaskUploadClass AsyncTaskUploadClassOBJ = new AsyncTaskUploadClass();
         AsyncTaskUploadClassOBJ.execute();
+
+
     }
 
     public class ImageProcessClass{
@@ -389,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
 
-                Toast.makeText(MainActivity.this, "Não foi possível abrir a camera", Toast.LENGTH_LONG).show();
+                makeText(MainActivity.this, "Não foi possível abrir a camera", LENGTH_LONG).show();
 
             }
         }

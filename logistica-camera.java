@@ -105,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        /*declarações de variaveis */
+
         user = findViewById(R.id.usuario);
         cpf = findViewById(R.id.et_cpf);
         tv = findViewById(R.id.textview);
@@ -157,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void enviarOutraImagem() {
+        /* ao enviar outra imagem, reseta a activity*/
         AlertDialog alerta;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Preparando para enviar outra imagem...");
@@ -167,10 +170,10 @@ public class MainActivity extends AppCompatActivity {
             finish();
             startActivity(intent);
             }, 3000);
-
     }
 
     private void showPictureDialog(){
+        /*mostrando a caixa para clicar na camera*/
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         pictureDialog.setTitle("Clique abaixo para abrir a camera: ");
         String[] pictureDialogItems = {
@@ -187,17 +190,16 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("QueryPermissionsNeeded")
     private void takePhotoFromCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
+        // tendo certeza de que existe uma camera
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
+            // criando o arquivo para onde a peça deve ir
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
-            
+                // caso ocorra erro na criação do arquivo
             }
-            // Continue only if the File was successfully created
+            // continua apenas se o arquivo foi criado
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.logistica",
@@ -210,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void galleryAddPic() {
+        // pegando a imagem e salvando
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(currentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
@@ -218,38 +221,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private File createImageFile() throws IOException {
-        // Create an image file name
+        // criando uma imagem com o nome do arquivo
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,  /* prefixo */
+                ".jpg",         /* sufixo */
+                storageDir      /* diretório */
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
+        // Salva o arquivo: caminho para para usar com intent ACTION_VIEW
         currentPhotoPath = image.getAbsolutePath();
         galleryAddPic();
         return image;
     }
 
     private void setPic() {
-        // Get the dimensions of the View
+        // pega as dimensoes do imageview
         int targetW = ShowSelectedImage.getWidth();
         int targetH = ShowSelectedImage.getHeight();
 
-        // Get the dimensions of the bitmap
+        // pega as dimensoes do bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
 
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
-        // Determine how much to scale down the image
+        // Determinando qual a proporção escalar da imagem
         int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
 
-        // Decode the image file into a Bitmap sized to fill the View
+        // Decode do arquivo da imagem em um bitmap do tamanho do imageview
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
@@ -260,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void UploadImageToServer(){
 
+        // compress da imagem para o upload
         FixBitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
         byteArray = byteArrayOutputStream.toByteArray();
         ConvertImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
@@ -288,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
                 makeText(MainActivity.this,string1, LENGTH_SHORT).show();
                 builder.setMessage("Deseja enviar outra imagem?");
                 builder.setPositiveButton("Sim", (dialog, which) -> {
+                    // caso sim , reseta a activity
                     Intent intent = getIntent();
                     finish();
                     startActivity(intent);
@@ -298,7 +303,12 @@ public class MainActivity extends AppCompatActivity {
                 alerta[0] = builder.create();
                 alerta[0].show();
                 outraimagem.setVisibility(View.VISIBLE);
+                UploadImageOnServerButton.setVisibility(View.INVISIBLE);
+                UploadImageOnServerButton.setEnabled(false);
+                GetImageFromGalleryButton.setVisibility((View.INVISIBLE));
+                GetImageFromGalleryButton.setEnabled(false);
 
+                // caso não , deixa a activity e habilita um botão
             }
 
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)

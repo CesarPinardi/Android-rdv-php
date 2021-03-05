@@ -112,9 +112,6 @@
 
             </LinearLayout>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
             <LinearLayout
                 android:id="@+id/LinearLayout03"
                 android:layout_width="match_parent"
@@ -144,9 +141,7 @@
                     tools:ignore="LabelFor" />
 
             </LinearLayout>
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
+
             <LinearLayout
                 android:id="@+id/LinearLayout04"
                 android:layout_width="match_parent"
@@ -157,7 +152,7 @@
                     android:layout_width="175dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="Valor do Combustível:"
+                    android:text="Quantidade de Km:"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="17sp"
@@ -181,9 +176,7 @@
                     tools:visibility="invisible" />
 
             </LinearLayout>
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
+
             <LinearLayout
                 android:id="@+id/LinearLayout05"
                 android:layout_width="match_parent"
@@ -246,6 +239,7 @@
                     android:layout_height="match_parent"
                     android:clickable="false"
                     android:gravity="center"
+                    android:focusable="true"
                     android:hint="ano/mes/dia"
                     android:importantForAutofill="no"
                     android:inputType="date"
@@ -292,6 +286,9 @@
                     android:onClick="OnVoltar"
                     android:text="Voltar"
                     tools:ignore="HardcodedText" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
 
             </LinearLayout>
 

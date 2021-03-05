@@ -24,6 +24,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
 public class BackgroundWorker extends AsyncTask<String, Void, String> {
+
     @SuppressLint("StaticFieldLeak")
     Context context;
 
@@ -37,7 +38,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String type = params[0];
 
         /* String banco */
-        String movimento_url = "";
+        String movimento_url = "http://189.1.174.107:8080/app/movimento_rdv.php";
 
         if (type.equals("regMov")) {
             try {
@@ -54,20 +55,46 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
-                String post_data = URLEncoder.encode("id_func", "UTF-8") + "=" + URLEncoder.encode(id_func, "UTF-8")
-                        + "&" + URLEncoder.encode("id_desp", "UTF-8") + "=" + URLEncoder.encode(id_desp, "UTF-8") + "&"
-                        + URLEncoder.encode("valor_desp", "UTF-8") + "=" + URLEncoder.encode(valor_desp, "UTF-8") + "&"
-                        + URLEncoder.encode("valor_km", "UTF-8") + "=" + URLEncoder.encode(valor_km, "UTF-8") + "&"
-                        + URLEncoder.encode("obs", "UTF-8") + "=" + URLEncoder.encode(obs, "UTF-8") + "&"
-                        + URLEncoder.encode("dataM", "UTF-8") + "=" + URLEncoder.encode(dataM, "UTF-8") + "&"
-                        + URLEncoder.encode("status", "UTF-8") + "=" + URLEncoder.encode(status, "UTF-8") + "&";
+                BufferedWriter bufferedWriter = new BufferedWriter(
+                        new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)
+                );
+                String post_data =
+                        URLEncoder.encode("id_func", "UTF-8") +
+                                "=" +
+                                URLEncoder.encode(id_func, "UTF-8") +
+                                "&" +
+                                URLEncoder.encode("id_desp", "UTF-8") +
+                                "=" +
+                                URLEncoder.encode(id_desp, "UTF-8") +
+                                "&" +
+                                URLEncoder.encode("valor_desp", "UTF-8") +
+                                "=" +
+                                URLEncoder.encode(valor_desp, "UTF-8") +
+                                "&" +
+                                URLEncoder.encode("valor_km", "UTF-8") +
+                                "=" +
+                                URLEncoder.encode(valor_km, "UTF-8") +
+                                "&" +
+                                URLEncoder.encode("obs", "UTF-8") +
+                                "=" +
+                                URLEncoder.encode(obs, "UTF-8") +
+                                "&" +
+                                URLEncoder.encode("dataM", "UTF-8") +
+                                "=" +
+                                URLEncoder.encode(dataM, "UTF-8") +
+                                "&" +
+                                URLEncoder.encode("status", "UTF-8") +
+                                "=" +
+                                URLEncoder.encode(status, "UTF-8") +
+                                "&";
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();
                 bufferedWriter.close();
                 outputStream.close();
                 InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.ISO_8859_1));
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(inputStream, StandardCharsets.ISO_8859_1)
+                );
                 StringBuilder result = new StringBuilder();
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
@@ -88,8 +115,7 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected void onPreExecute() {
-    }
+    protected void onPreExecute() {}
 
     @Override
     protected void onPostExecute(String result) {

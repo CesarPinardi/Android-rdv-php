@@ -22,7 +22,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="30dp" />
+                android:layout_height="16dp" />
 
             <LinearLayout
                 android:id="@+id/LinearLayout04"
@@ -59,7 +59,8 @@
             <LinearLayout
                 android:id="@+id/LinearLayout05"
                 android:layout_width="match_parent"
-                android:layout_height="42dp">
+                android:layout_height="42dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -75,55 +76,52 @@
                     android:layout_height="match_parent" />
 
                 <EditText
-                    android:id="@+id/desp"
+                    android:id="@+id/despEmString"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:layout_gravity="center"
-                    android:inputType="text"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
                     android:autofillHints="despesa"
-                    tools:ignore="LabelFor" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/LinearLayout02"
-                android:layout_width="match_parent"
-                android:layout_height="42dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Nome da imagem:"
-                    android:textColor="@color/black"
                     android:inputType="text"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
-                    tools:ignore="HardcodedText,TextViewEdits" />
-
-                <Space
-                    android:layout_width="16dp"
-                    android:layout_height="match_parent" />
+                    tools:ignore="LabelFor" />
 
                 <EditText
-                    android:id="@+id/imageName"
-                    android:layout_width="match_parent"
+                    android:id="@+id/desp"
+                    android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:autofillHints="despesa"
                     android:inputType="text"
                     android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:importantForAutofill="no"
-                    tools:ignore="LabelFor" />
+                    tools:ignore="LabelFor"
+                    android:visibility="invisible"/>
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/textview"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:visibility="invisible" />
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="10dp"/>
 
+            <Button
+                android:id="@+id/btnOutraImagem"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:text="Enviar outra imagem"
+                android:visibility="invisible" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
             <LinearLayout
                 android:id="@+id/LinearLayout0"
                 android:layout_width="match_parent"
@@ -136,7 +134,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:background="#FFF"
-                    android:text="Selecionar"
+                    android:text="Abrir camera"
                     android:textSize="13sp"
                     tools:ignore="HardcodedText" />
 
@@ -155,10 +153,6 @@
                     tools:ignore="HardcodedText" />
 
             </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
 
             <ImageView
                 android:id="@+id/imageView"

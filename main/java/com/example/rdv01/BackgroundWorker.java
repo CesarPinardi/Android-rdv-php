@@ -38,17 +38,18 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String type = params[0];
 
         /* String banco */
-        String movimento_url = "http://189.1.174.107:8080/app/movimento_rdv.php";
+        String movimento_url = "http://192.168.0.105/rdv/app/movimento_rdv.php";
 
         if (type.equals("regMov")) {
             try {
-                String id_func = params[1];
-                String id_desp = params[2];
-                String valor_desp = params[3];
-                String valor_km = params[4];
-                String obs = params[5];
-                String dataM = params[6];
-                String status = params[7];
+                String id_movimento = params[1];
+                String id_func = params[2];
+                String id_desp = params[3];
+                String valor_desp = params[4];
+                String valor_km = params[5];
+                String obs = params[6];
+                String dataM = params[7];
+                String status = params[8];
                 URL url = new URL(movimento_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -59,7 +60,11 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
                         new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)
                 );
                 String post_data =
-                        URLEncoder.encode("id_func", "UTF-8") +
+                                URLEncoder.encode("id_movimento", "UTF-8") +
+                                "=" +
+                                URLEncoder.encode(id_movimento, "UTF-8") +
+                                "&" +
+                                URLEncoder.encode("id_func", "UTF-8") +
                                 "=" +
                                 URLEncoder.encode(id_func, "UTF-8") +
                                 "&" +

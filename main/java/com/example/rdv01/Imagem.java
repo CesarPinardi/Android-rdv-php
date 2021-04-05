@@ -1,7 +1,6 @@
 package com.example.rdv01;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,13 +11,13 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,7 +49,6 @@ import java.util.Random;
 import javax.net.ssl.HttpsURLConnection;
 
 import static android.widget.Toast.LENGTH_LONG;
-import static android.widget.Toast.LENGTH_SHORT;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class Imagem extends AppCompatActivity {
@@ -59,45 +57,40 @@ public class Imagem extends AppCompatActivity {
 
     ImageView ShowSelectedImage;
 
-    EditText user, desp;
+    EditText user, desp, auxDesp;
 
     Bitmap FixBitmap;
 
-    String ImageTag = "image_tag" ;
+    String ImageTag = "image_tag", ImageData = "image_data", ConvertImage, GetImageNameFromEditText, id_movimento;
 
-    String ImageData = "image_data" ;
+    ProgressDialog progressDialog;
 
-    ProgressDialog progressDialog ;
+    ByteArrayOutputStream byteArrayOutputStream;
 
-    ByteArrayOutputStream byteArrayOutputStream ;
+    byte[] byteArray;
 
-    byte[] byteArray ;
-
-    String ConvertImage ;
-
-    String GetImageNameFromEditText;
-
-    HttpURLConnection httpURLConnection ;
+    HttpURLConnection httpURLConnection;
 
     URL url;
 
     OutputStream outputStream;
 
-    BufferedWriter bufferedWriter ;
+    BufferedWriter bufferedWriter;
 
-    int RC ;
+    int RC;
 
-    BufferedReader bufferedReader ;
+    BufferedReader bufferedReader;
 
     StringBuilder stringBuilder;
 
     boolean check = true;
 
-    private String currentPhotoPath;
+    String currentPhotoPath, auxRand, currentDateTimeString;
 
-    Button outraimagem;
+    String equipe, gerencia, direcao;
 
-    EditText auxDesp;
+    TextView mov, valorD, valorC, obs, data;
+
 
     @SuppressLint({"SimpleDateFormat", "SetTextI18n"})
     @Override
@@ -112,9 +105,10 @@ public class Imagem extends AppCompatActivity {
         user = findViewById(R.id.usuario);
         desp = findViewById(R.id.desp);
         auxDesp = findViewById(R.id.despEmString);
-
-
-        outraimagem = findViewById(R.id.btnOutraImagem);
+        valorD = findViewById(R.id.pegaValorDesp);
+        valorC = findViewById(R.id.pegaValorComb);
+        obs = findViewById(R.id.pegaObs);
+        data = findViewById(R.id.pegaData);
 
         GetImageFromGalleryButton = findViewById(R.id.buttonSelect);
 
@@ -126,37 +120,54 @@ public class Imagem extends AppCompatActivity {
 
         /*Pegando nome do usuario digitado na tela de login*/
 
-        pegarUsuario();
+        pegarDados();
 
-        outraimagem.setOnClickListener(view -> enviarOutraImagem());
+        GetImageFromGalleryButton.setOnClickListener(view -> takePhotoFromCamera());
+        Toast.makeText(this, "passou pela camera", Toast.LENGTH_SHORT);
 
-        GetImageFromGalleryButton.setOnClickListener(view ->{
-            takePhotoFromCamera();
-        });
+        currentDateTimeString = java.text.DateFormat.getDateInstance().format(new Date());
 
-        String currentDateTimeString = java.text.DateFormat.getDateInstance().format(new Date());
+        getRandom();
 
-        Random r = new Random();
-        float i1 = (float) (r.nextInt(100 - 1));
-        String auxRand = Float.toString(i1);
+            UploadImageOnServerButton.setOnClickListener(view -> {
+                GetImageNameFromEditText = auxRand + currentDateTimeString;
+                setPic();
+                if (FixBitmap != null) {
 
-        UploadImageOnServerButton.setOnClickListener(view -> {
-            GetImageNameFromEditText = auxDesp.getText().toString() + auxRand + currentDateTimeString;
-            setPic();
-            UploadImageToServer();
+                    UploadImageToServer();
+                } else {
+                    Toast.makeText(this, "Erro ao encontrar imagem!", Toast.LENGTH_SHORT).show();
 
-        });
+                }
+            });
+
+        getPermissoes();
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+    }
+
+    private void getPermissoes() {
         if (ContextCompat.checkSelfPermission(Imagem.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{android.Manifest.permission.CAMERA},
                         5);
             }
         }
-
     }
 
-    @SuppressLint("SetTextI18n")
-    private void pegarUsuario() {
+
+    private void getRandom() {
+        Random r = new Random();
+        float i1 = (float) (r.nextInt(1000 - 1));
+        auxRand = Float.toString(i1);
+    }
+
+    @SuppressLint({"SetTextI18n", "ShowToast"})
+    private void pegarDados() {
         Intent intent = getIntent();
         if (intent != null) {
             Bundle params = intent.getExtras();
@@ -166,40 +177,46 @@ public class Imagem extends AppCompatActivity {
                 String strdesp = params.getString("Desp");
                 desp.setText(strdesp);
                 //aqui pega o valor que veio de Movimento e transforma em String de acordo com os valores para melhor visualizacao
-                if(desp.getText().toString().equals("1")){
+                if (desp.getText().toString().equals("1")) {
                     auxDesp.setText("Alimentação");
-                } else if (desp.getText().toString().equals("2")){
-                        auxDesp.setText("Combustível");
-                    } else if(desp.getText().toString().equals("3")){
-                        auxDesp.setText("Estacionamento");
-                    } else if(desp.getText().toString().equals("4")){
-                        auxDesp.setText("Hospedagem");
-                    } else if (desp.getText().toString().equals("5")){
-                        auxDesp.setText("Outros");
-                    } else if (desp.getText().toString().equals("6")){
-                        auxDesp.setText("Pedágio");
-                    }
+                } else if (desp.getText().toString().equals("2")) {
+                    auxDesp.setText("Combustivel");
+                } else if (desp.getText().toString().equals("3")) {
+                    auxDesp.setText("Estacionamento");
+                } else if (desp.getText().toString().equals("4")) {
+                    auxDesp.setText("Hospedagem");
+                } else if (desp.getText().toString().equals("5")) {
+                    auxDesp.setText("Outros");
+                } else if (desp.getText().toString().equals("6")) {
+                    auxDesp.setText("Pedagio");
+                }
+
+                String valorDesp = params.getString("ValorDesp");
+                valorD.setText(valorDesp);
+                String valorComb = params.getString("ValorComb");
+                valorC.setText(valorComb);
+                String sobs = params.getString("Obs");
+                obs.setText(sobs);
+                String sdata = params.getString("Data");
+                data.setText(sdata);
+                gerencia = params.getString("gerencia");
+                equipe = params.getString("equipe");
+                direcao = params.getString("direcao");
+
             }
         }
     }
 
-    private void enviarOutraImagem() {
-        /* ao enviar outra imagem, reset a activity*/
-        AlertDialog alerta;
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("");
-        builder.setMessage("Preparando para enviar outra imagem...");
-        alerta = builder.create();
-        alerta.show();
-        new Handler().postDelayed(this::resetAct, 2500);
-    }
-
-    private void resetAct(){
-        Intent intent = getIntent();
+    public void OnVoltar(View view) {
+        Intent v = new Intent(Imagem.this, Movimento.class);
+        v.putExtra("UserVolta", user.getText().toString());
+        v.putExtra("gerencia", gerencia);
+        v.putExtra("equipe", equipe);
+        v.putExtra("direcao", direcao);
         finish();
-        startActivity(intent);
-    }
 
+        startActivity(v);
+    }
 
     @SuppressLint("QueryPermissionsNeeded")
     private void takePhotoFromCamera() {
@@ -264,7 +281,7 @@ public class Imagem extends AppCompatActivity {
         int photoH = bmOptions.outHeight;
 
         // Determinando qual a proporção escalar da imagem
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
         // Decode do arquivo da imagem em um bitmap do tamanho do imageview
         bmOptions.inJustDecodeBounds = false;
@@ -275,24 +292,22 @@ public class Imagem extends AppCompatActivity {
         ShowSelectedImage.setImageBitmap(FixBitmap);
     }
 
-    public void UploadImageToServer(){
-
+    public void UploadImageToServer() {
         // compress da imagem para o upload
-        FixBitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+
+        FixBitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
         byteArray = byteArrayOutputStream.toByteArray();
         ConvertImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        final AlertDialog[] alerta = new AlertDialog[1];
-        AlertDialog.Builder builder = new AlertDialog.Builder(Imagem.this);
 
 
         @SuppressLint("StaticFieldLeak")
-        class AsyncTaskUploadClass extends AsyncTask<Void,Void,String> {
+        class AsyncTaskUploadClass extends AsyncTask<Void, Void, String> {
 
             @Override
             protected void onPreExecute() {
 
                 super.onPreExecute();
-                progressDialog = ProgressDialog.show(Imagem.this,"A imagem está sendo enviada...","Por favor, aguarde...",false,false);
+                progressDialog = ProgressDialog.show(Imagem.this, "A imagem está sendo enviada...", "Por favor, aguarde...", false, false);
 
             }
 
@@ -303,23 +318,13 @@ public class Imagem extends AppCompatActivity {
 
                 progressDialog.dismiss();
 
-                Toast.makeText(Imagem.this,string1, LENGTH_SHORT).show();
-                builder.setMessage("Deseja enviar outra imagem?");
-                builder.setPositiveButton("Sim", (dialog, which) -> {
-                    // caso sim , reseta a activity
-                    resetAct();
-                });
-                builder.setNegativeButton("Não", (dialog, which) ->
-                        Toast.makeText(Imagem.this,"Clique no botão acima para enviar " +
-                                "outra imagem a qualquer momento!", LENGTH_LONG).show());
-                alerta[0] = builder.create();
-                alerta[0].show();
-                outraimagem.setVisibility(View.VISIBLE);
+                Toast.makeText(Imagem.this,string1, Toast.LENGTH_SHORT).show();
+
                 UploadImageOnServerButton.setVisibility(View.INVISIBLE);
                 UploadImageOnServerButton.setEnabled(false);
                 GetImageFromGalleryButton.setVisibility((View.INVISIBLE));
                 GetImageFromGalleryButton.setEnabled(false);
-
+                FixBitmap.recycle();
                 // caso não , deixa a activity e habilita um botão
             }
 
@@ -327,41 +332,90 @@ public class Imagem extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
 
-                String usr = user.getText().toString();
-                String ImageUser = "image_user";
-                String dsp = desp.getText().toString();
-                String ImageDesp = "image_desp";
+                String Cd_user = "cd_user";
+                String Direcao = "direcao";
+                String Gerencia = "gerencia";
+                String Equipe = "equipe";
+                String IdDesp = "id_desp";
+                String ValorDesp = "valor_desp";
+                String Km = "km";
+                String Obs = "obs";
+                String Data = "dataM";
+                String Status = "statusM";
+                String ObsRep = "obsRep";
+
+                String cd_user = user.getText().toString();
+
+                String id_desp = desp.getText().toString();
+
+                String valor_desp = valorD.getText().toString();
+
+                String km = valorC.getText().toString();
+
+                String sobs = obs.getText().toString();
+
+                String dataM = data.getText().toString();
+
+                String strDir = direcao;
+
+                String strEquipe = equipe;
+
+                String strGerenc = gerencia;
 
                 ImageProcessClass imageProcessClass = new ImageProcessClass();
 
-                HashMap<String,String> HashMapParams = new HashMap<>();
+                HashMap<String, String> HashMapParams = new HashMap<>();
 
                 HashMapParams.put(ImageTag, GetImageNameFromEditText);
 
                 HashMapParams.put(ImageData, ConvertImage);
 
-                HashMapParams.put(ImageUser,usr);
+                HashMapParams.put(Cd_user, cd_user);
 
-                HashMapParams.put(ImageDesp,dsp);
+                HashMapParams.put(Direcao, strDir);
+
+                HashMapParams.put(Gerencia, strGerenc);
+
+                HashMapParams.put(Equipe, strEquipe);
+
+                HashMapParams.put(IdDesp, id_desp);
+
+                HashMapParams.put(ValorDesp, valor_desp);
+
+                HashMapParams.put(Km, km);
+
+                HashMapParams.put(Obs, sobs);
+
+                HashMapParams.put(Data, dataM);
+
+                HashMapParams.put(Status, "indefinido");
+
+                HashMapParams.put(ObsRep, "");
 
                 System.out.println("Initial Mappings are: " + HashMapParams);
 
                 //return imageProcessClass.ImageHttpRequest("http://192.168.0.105/rdv/uploadExample/upload-image-to-server.php", HashMapParams);
-                return imageProcessClass.ImageHttpRequest("http://189.1.174.107:8080/app/upload/upload-image-to-server.php", HashMapParams);
+                return imageProcessClass.ImageHttpRequest("http://189.1.174.107:8080/rdv/_lib/file/img/php/upload-image-to-server.php", HashMapParams);
+
             }
 
         }
-
         AsyncTaskUploadClass AsyncTaskUploadClassOBJ = new AsyncTaskUploadClass();
         AsyncTaskUploadClassOBJ.execute();
-
-
     }
 
-    public class ImageProcessClass{
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 5) if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        } else Toast.makeText(Imagem.this, "Não foi possível abrir a camera", LENGTH_LONG).show();
+    }
+
+    public class ImageProcessClass {
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        public String ImageHttpRequest(String requestURL, HashMap<String,String> PData) {
+        public String ImageHttpRequest(String requestURL, HashMap<String, String> PData) {
 
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -382,9 +436,7 @@ public class Imagem extends AppCompatActivity {
 
                 outputStream = httpURLConnection.getOutputStream();
 
-                bufferedWriter = new BufferedWriter(
-
-                        new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+                bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
 
                 bufferedWriter.write(bufferedWriterDataFN(PData));
 
@@ -404,7 +456,7 @@ public class Imagem extends AppCompatActivity {
 
                     String RC2;
 
-                    while ((RC2 = bufferedReader.readLine()) != null){
+                    while ((RC2 = bufferedReader.readLine()) != null) {
 
                         stringBuilder.append(RC2);
                     }
@@ -432,25 +484,7 @@ public class Imagem extends AppCompatActivity {
 
                 stringBuilder.append(URLEncoder.encode(KEY.getValue(), "UTF-8"));
             }
-
             return stringBuilder.toString();
-        }
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 5) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Now user should be able to use camera
-
-            }
-            else {
-
-                Toast.makeText(Imagem.this, "Não foi possível abrir a camera", LENGTH_LONG).show();
-
-            }
         }
     }
 }

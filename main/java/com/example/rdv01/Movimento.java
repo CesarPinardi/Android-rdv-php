@@ -224,6 +224,7 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
                     String data = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
                     txtDate.setText(data);
                     formataData();
+                    inverteData();
                 }
 
             };
@@ -238,11 +239,10 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
 
         if(tamString == 10){
             System.out.println("Data no tamanho ok");
-            inverteData10();
         } else if(tamString == 8){
             System.out.println("Mes e dia < 10");
-            transformade8para10();
-            inverteData8();
+            String novaData = aumentaTamString();
+            txtDate.setText(novaData);
         } else if(tamString == 9){
             System.out.println("Mes ou ano < 10.\nAgora descobrir qual dos dois é:");
             char achaDia = dataFormatada.charAt(1);
@@ -251,22 +251,29 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
                 String novaData = addChar(dataFormatada, '0', 0);
                 System.out.println("Dia < 10: " + novaData);
                 txtDate.setText(novaData);
-                inverteData();
             } else if(achaMes == '-'){
                 String novaData = addChar(dataFormatada, '0', 3);
                 System.out.println("Mes < 10: " + novaData);
                 txtDate.setText(novaData);
-                inverteData();
             }
 
         }
 
     }
 
-    private void transformade8para10() {
-        
-    }
+    public String aumentaTamString() {
+        String data = txtDate.getText().toString();
+        String auxDia = data.substring(0,1);
+        String auxMes = data.substring(2,3);
+        String auxAno = data.substring(4,8);
 
+        System.out.println("Mes:" + auxMes + "\nDia:" + auxDia + "\nAno:" + auxAno);
+
+        String aux = "0" + auxDia + "-" + "0" + auxMes + "-" + auxAno;
+        System.out.println("Nova data aumentada" + aux);
+        return aux;
+
+    }
 
     public String addChar(String str, char ch, int position) {
         int len = str.length();
@@ -276,30 +283,6 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         str.getChars(position, len, updatedArr, position + 1);
         return new String(updatedArr);
     }
-    
-    
-    private void inverteData10() {
-        String dataBr = txtDate.getText().toString();
-
-        String auxAno = dataBr.substring(6,10);
-        System.out.println("Ano:" + auxAno);
-
-        String auxMes = dataBr.substring(3,5);
-        System.out.println("Mes:" + auxMes);
-
-        String auxDia = dataBr.substring(0,2);
-        System.out.println("Dia:" + auxDia);
-
-        dataBanco = auxAno + "-" + auxMes + "-" + auxDia;
-        System.out.println("Data banco: "+ dataBanco);
-    }
-    
-    private void inverteData8() {
-        
-    }
-    
-
-   
 
     public void inverteData(){
 

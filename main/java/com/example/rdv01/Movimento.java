@@ -1,8 +1,9 @@
-package com.example.rdv01;
+package com.controll_rdv.rdv01;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,14 +35,18 @@ import static android.widget.Toast.LENGTH_LONG;
 
 public class Movimento extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int DATE_DIALOG_ID = 0;
     EditText valor_desp, valor_km, obs, id_func;
     TextView id_desp, labelkm, dicadata;
     Spinner spnDespesa;
     Button btnDatePicker, btnInsert;
-    EditText txtDate;
+    EditText txtDate, auxDate;
     private int mYear, mMonth, mDay;
     String idMovimento;
     String getGerenc, getEquip, getDir;
+    String dataBanco;
+
+    String auxData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +71,6 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
 
         selecionarDespesa();
 
-
         btnDatePicker.setOnClickListener(this);
 
         recuperarUsername();
@@ -81,6 +86,7 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         id_func.setText(strU);
         recuperarVoltar();
 
+
     }
 
     private void recuperarGerencia() {
@@ -91,7 +97,6 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
                 getGerenc = params.getString("gerencia");
                 getEquip = params.getString("equipe");
                 getDir = params.getString("direcao");
-                System.out.println(getGerenc + "" + getEquip + "" + getDir);
             }
         }
     }
@@ -137,7 +142,7 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
                             valor_km.setVisibility(View.VISIBLE);
                             labelkm.setVisibility(View.VISIBLE);
                             valor_desp.setFilters(new InputFilter[]{ new InputFilterMinMax("1.00", "9999.00")});
-                            valor_km.setFilters(new InputFilter[]{ new InputFilterMinMax("1.00", "99999.00")});
+                            valor_km.setFilters(new InputFilter[]{ new InputFilterMinMax("1.00", "999999.00")});
                         } else {
                             if (yourDespesa.equals("Estacionamento")) {
                                 id_desp.setText("3");
@@ -193,26 +198,134 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
     }
 
     /* botão para abrir o calendario */
+    @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        escondeTeclado();
+        Calendar calendario = Calendar.getInstance();
+
+        int ano = calendario.get(Calendar.YEAR);
+        int mes = calendario.get(Calendar.MONTH);
+        int dia = calendario.get(Calendar.DAY_OF_MONTH);
+
+        if (id == DATE_DIALOG_ID) {
+            return new DatePickerDialog(this, mDateSetListener, ano, mes,
+                    dia);
+
+        }
+
+        return null;
+    }
+
+    private final DatePickerDialog.OnDateSetListener mDateSetListener =
+            new DatePickerDialog.OnDateSetListener() {
+                public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                      int dayOfMonth) {
+                    String data = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                    txtDate.setText(data);
+                    formataData();
+                }
+
+            };
+
+
+    public void formataData(){
+        String dataFormatada = txtDate.getText().toString();
+        System.out.println(dataFormatada);
+        System.out.println("Verificando tamanho da string");
+
+        int tamString = dataFormatada.length();
+
+        if(tamString == 10){
+            System.out.println("Data no tamanho ok");
+            inverteData10();
+        } else if(tamString == 8){
+            System.out.println("Mes e dia < 10");
+            transformade8para10();
+            inverteData8();
+        } else if(tamString == 9){
+            System.out.println("Mes ou ano < 10.\nAgora descobrir qual dos dois é:");
+            char achaDia = dataFormatada.charAt(1);
+            char achaMes = dataFormatada.charAt(4);
+            if(achaDia == '-'){
+                String novaData = addChar(dataFormatada, '0', 0);
+                System.out.println("Dia < 10: " + novaData);
+                txtDate.setText(novaData);
+                inverteData();
+            } else if(achaMes == '-'){
+                String novaData = addChar(dataFormatada, '0', 3);
+                System.out.println("Mes < 10: " + novaData);
+                txtDate.setText(novaData);
+                inverteData();
+            }
+
+        }
+
+    }
+
+    private void transformade8para10() {
+        
+    }
+
+
+    public String addChar(String str, char ch, int position) {
+        int len = str.length();
+        char[] updatedArr = new char[len + 1];
+        str.getChars(0, position, updatedArr, 0);
+        updatedArr[position] = ch;
+        str.getChars(position, len, updatedArr, position + 1);
+        return new String(updatedArr);
+    }
+    
+    
+    private void inverteData10() {
+        String dataBr = txtDate.getText().toString();
+
+        String auxAno = dataBr.substring(6,10);
+        System.out.println("Ano:" + auxAno);
+
+        String auxMes = dataBr.substring(3,5);
+        System.out.println("Mes:" + auxMes);
+
+        String auxDia = dataBr.substring(0,2);
+        System.out.println("Dia:" + auxDia);
+
+        dataBanco = auxAno + "-" + auxMes + "-" + auxDia;
+        System.out.println("Data banco: "+ dataBanco);
+    }
+    
+    private void inverteData8() {
+        
+    }
+    
+
+   
+
+    public void inverteData(){
+
+        String dataBr = txtDate.getText().toString();
+
+        String auxAno = dataBr.substring(6,10);
+        System.out.println("Ano:" + auxAno);
+
+        String auxMes = dataBr.substring(3,5);
+        System.out.println("Mes:" + auxMes);
+
+        String auxDia = dataBr.substring(0,2);
+        System.out.println("Dia:" + auxDia);
+
+        dataBanco = auxAno + "-" + auxMes + "-" + auxDia;
+        System.out.println("Data banco: "+ dataBanco);
+
+    }
+
+
     @Override
     public void onClick(View v) {
-        if (v == btnDatePicker) {
-            dicadata.setVisibility(View.INVISIBLE);
-            escondeTeclado();
-            /* Data atual */
-            final Calendar c = Calendar.getInstance();
-            mYear = c.get(Calendar.YEAR);
-            mMonth = c.get(Calendar.MONTH);
-            mDay = c.get(Calendar.DAY_OF_MONTH);
-
-            @SuppressLint("SetTextI18n")
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) ->
-                    txtDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth),
-                    mYear,
-                    mMonth,
-                    mDay);
-            datePickerDialog.show();
-        }
+        if (v == btnDatePicker)
+            showDialog(DATE_DIALOG_ID);
     }
+
 
     private void verificaUser(){
         if(id_func.getText().toString().equals("")){
@@ -226,6 +339,7 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
     }
 
     public void OnEnviarMovimento(View view) {
+
         verificaUser();
         AlertDialog alerta;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -251,7 +365,6 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
             alerta.show();
         }
     }
-
 
     /*funções simples*/
 
@@ -282,8 +395,6 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         String saveUser = id_func.getText().toString();
         editor.putString("usr", saveUser);
         editor.apply();
-
-
     }
 
     private void escondeTeclado(){
@@ -296,8 +407,7 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
 
     private boolean checarCampos(){
         if (id_func.getText().toString().equals("") || id_desp.getText().toString().equals("") ||
-            valor_desp.getText().toString().equals("") || obs.getText().toString().equals("")
-            || txtDate.getText().toString().equals("")) {
+            valor_desp.getText().toString().equals("") || txtDate.getText().toString().equals("")) {
             /* caso algum campo esteja vazio */
             Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
             return false;
@@ -320,7 +430,10 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         }
     }
 
+
+
     private void enviarDados() {
+
         Intent img = new Intent(Movimento.this, Imagem.class);
         img.putExtra("User", id_func.getText().toString());
         img.putExtra("Desp", id_desp.getText().toString());
@@ -328,11 +441,12 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         img.putExtra("ValorDesp", valor_desp.getText().toString());
         img.putExtra("ValorComb", valor_km.getText().toString());
         img.putExtra("Obs", obs.getText().toString());
-        img.putExtra("Data", txtDate.getText().toString());
+        img.putExtra("Data", dataBanco);
         img.putExtra("gerencia", getGerenc);
         img.putExtra("equipe", getEquip);
         img.putExtra("direcao", getDir);
         startActivity(img);
+        finish();
     }
 
     public void OnVoltar(View view) {

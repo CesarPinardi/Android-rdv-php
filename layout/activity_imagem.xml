@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".Imagem">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            tools:ignore="ScrollViewSize">
+
+            <TextView
+                android:id="@+id/pegaValorDesp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:text="@string/valor_despesa" />
+
+            <TextView
+                android:id="@+id/pegaValorComb"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:text="@string/valor_comb" />
+
+            <TextView
+                android:id="@+id/pegaObs"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:text="@string/obs"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/pegaData"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:text="@string/data"
+                tools:ignore="HardcodedText" />
+
+            <LinearLayout
+                android:id="@+id/LinearLayout04"
+                android:layout_width="match_parent"
+                android:layout_height="42dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Usuário:"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+                <Space
+                    android:layout_width="26dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/usuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:autofillHints="user"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    tools:ignore="LabelFor" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LinearLayout05"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Despesa:"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+                <Space
+                    android:layout_width="18dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/despEmString"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:autofillHints="despesa"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    tools:ignore="LabelFor" />
+
+                <EditText
+                    android:id="@+id/desp"
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:autofillHints="despesa"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:visibility="invisible"
+                    tools:ignore="LabelFor" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textview"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:visibility="invisible" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="9dp" />
+
+            <Button
+                android:id="@+id/buttonSelect"
+                android:layout_width="140sp"
+                android:layout_height="40sp"
+                android:layout_gravity="center"
+                android:background="#FFF"
+                android:text="Abrir camera"
+                android:textSize="13sp"
+                tools:ignore="HardcodedText" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20sp" />
+
+            <Button
+                android:id="@+id/buttonUpload"
+                android:layout_width="140sp"
+                android:layout_height="40sp"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="Confirmar"
+                android:visibility="visible"
+                tools:ignore="HardcodedText" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <Button
+                android:id="@+id/btnVoltar"
+                android:layout_width="144dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:onClick="OnVoltar"
+                android:text="Voltar"
+                tools:ignore="HardcodedText,RtlHardcoded" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_gravity="center"
+                android:contentDescription="Imagem"
+                android:rotation="90"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/t_i_vetline"
+            android:textColor="#000"
+            android:textSize="15sp" />
+    </RelativeLayout>
+</RelativeLayout>

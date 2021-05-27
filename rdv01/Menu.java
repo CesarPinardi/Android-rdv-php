@@ -1,7 +1,9 @@
 package com.controll_rdv.rdv01;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,9 +27,29 @@ public class Menu extends AppCompatActivity {
 
         user = findViewById(R.id.tvnomeMenu);
         pegarDados();
+
+        if(!pegarDados()){
+            recuperarVoltar();
+        }
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String strU = prefs.getString("usr", "");
+        user.setText(strU);
+        recuperarVoltar();
+
+
     }
 
-    private void pegarDados() {
+    private void recuperarVoltar() {
+        /*recuperando o username a partir da funcao sharedpreferences*/
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(Menu.this);
+        SharedPreferences.Editor editor = preferences.edit();
+        String saveUser = user.getText().toString();
+        editor.putString("usr", saveUser);
+        editor.apply();
+    }
+
+    private boolean pegarDados() {
         Intent intent = getIntent();
         if (intent != null) {
             Bundle params = intent.getExtras();
@@ -40,8 +62,11 @@ public class Menu extends AppCompatActivity {
                 System.out.println("direcao: " + getDir);
                 System.out.println("equipe: " + getEquip);
                 System.out.println("gerencia: " + getGerenc);
+                return true;
             }
+            return true;
         }
+        return false;
     }
 
     private void enviarDados(int qualClasse) {

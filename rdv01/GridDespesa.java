@@ -52,10 +52,7 @@ public class GridDespesa extends AppCompatActivity {
         lv = findViewById(R.id.lv);
 
         lv.setOnItemClickListener((parent, view, position, id) -> {
-            // When clicked, show a toast with the TextView text
-
             String dados = (String) ((TextView) view).getText();
-            String auxH = auxHolder;
             System.out.print(dados);
 
             int indexN = dados.indexOf('D',4);
@@ -77,6 +74,7 @@ public class GridDespesa extends AppCompatActivity {
 
             Intent intent = new Intent(getApplicationContext(), DisplayFoto.class);
             intent.putExtra("idFoto", aux);
+            intent.putExtra("user", usuario);
             startActivity(intent);
 
 
@@ -96,7 +94,7 @@ public class GridDespesa extends AppCompatActivity {
 
         /*fazer o get com o usuario!!*/
 
-        String apiurl = getString(R.string.getDespesa1) + dataInicialBanco + getString(R.string.getDespesa2) + dataFinalBanco + "&user=" + usuario;
+        String apiurl = getString(R.string.getDespesa1) + dataInicialBanco + getString(R.string.getDespesa2) + dataFinalBanco + getString(R.string.getDespesa3) + usuario;
         @SuppressLint("StaticFieldLeak")
         class dbManager extends AsyncTask<String, Void, String> {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -167,8 +165,7 @@ public class GridDespesa extends AppCompatActivity {
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Erro! Despesa não encontrada!", Toast.LENGTH_SHORT).show();
-
-                    //limpar o listview? holder.clear();
+                    finish();
                 }
             }
 

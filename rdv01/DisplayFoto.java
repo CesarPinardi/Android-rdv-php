@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,16 +36,16 @@ import java.util.Map;
 
 public class DisplayFoto extends AppCompatActivity implements View.OnClickListener {
     TextView idFoto, tvPath;
-
     ImageView imageView;
-    String image_path;
-    String user;
+    String image_path, user;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_foto);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         idFoto = findViewById(R.id.tvLabelIDFoto);
         imageView = findViewById(R.id.img);
 
@@ -57,7 +58,6 @@ public class DisplayFoto extends AppCompatActivity implements View.OnClickListen
         getImagePath();
 
     }
-
 
     public void getImagePath() {
 
@@ -83,14 +83,12 @@ public class DisplayFoto extends AppCompatActivity implements View.OnClickListen
                 tvPath.setText(image_path);
                 String path = tvPath.getText().toString();
 
-                //url ex http://189.1.174.107:8080/RDV/_lib/file/img/php/uploads/257.020%20de%20mai%20de%201.jpg
                 Picasso.with(getApplicationContext()).load("http://189.1.174.107:8080/RDV/_lib/file/img/" + path).into(imageView);
 
             }
 
             @Override
             protected String doInBackground(String... strings) {
-
                 try {
                     java.net.URL url = new URL(strings[0]);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -115,7 +113,6 @@ public class DisplayFoto extends AppCompatActivity implements View.OnClickListen
 
     }
 
-
     private void pegarDados() {
         Intent intent = getIntent();
         if (intent != null) {
@@ -129,7 +126,6 @@ public class DisplayFoto extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-
     @Override
     public void onClick(View v) {
 
@@ -137,14 +133,12 @@ public class DisplayFoto extends AppCompatActivity implements View.OnClickListen
 
     public void excluir(View view) {
 
-        //String url = "http://189.1.174.107:8080/rdv/_lib/file/img/php/delete.php?id="+idFoto.getText().toString();
-
         AlertDialog alerta;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //define a mensagem
+
         builder.setMessage("Deseja mesmo excluir essa despesa?");
-        //define um botão como positivo
+
         builder.setPositiveButton("Sim", (arg0, arg1) -> {
             excluirDespesa();
             Handler handler = new Handler();
@@ -157,7 +151,7 @@ public class DisplayFoto extends AppCompatActivity implements View.OnClickListen
 
 
         });
-        //define um botão como negativo.
+
         builder.setNegativeButton("Não", (arg0, arg1) -> {
             Toast.makeText(getApplicationContext(), "OK!\nA despesa não fui excluída!\nVoltando para o menu!", Toast.LENGTH_SHORT).show();
             Handler handler = new Handler();
@@ -168,9 +162,9 @@ public class DisplayFoto extends AppCompatActivity implements View.OnClickListen
                 startActivity(v);
             }, 3000);
         });
-        //cria o AlertDialog
+
         alerta = builder.create();
-        //Exibe
+
         alerta.show();
 
     }
@@ -198,6 +192,4 @@ public class DisplayFoto extends AppCompatActivity implements View.OnClickListen
         requestQueue.add(request);
 
     }
-
-
 }

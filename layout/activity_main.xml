@@ -24,13 +24,12 @@
 
             </Space>
 
-
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="icone"
-                app:srcCompat="@drawable/logo"
+                app:srcCompat="@drawable/icone2"
                 tools:ignore="HardcodedText" />
 
             <ListView
@@ -40,7 +39,6 @@
                 android:visibility="visible">
 
             </ListView>
-
 
         </LinearLayout>
 
@@ -66,10 +64,9 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="textPassword"
+                android:text=""
                 android:textSize="25sp"
-                android:text="adm"
                 tools:ignore="HardcodedText,LabelFor" />
-
 
             <CheckBox
                 android:id="@+id/checkBox"
@@ -110,8 +107,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
 
-
         </LinearLayout>
+
     </LinearLayout>
 
     <RelativeLayout
@@ -128,6 +125,7 @@
             android:text="@string/t_i_vetline"
             android:textColor="#000"
             android:textSize="15sp" />
+
     </RelativeLayout>
 
 </RelativeLayout>

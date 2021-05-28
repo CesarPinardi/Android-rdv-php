@@ -22,7 +22,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="30dp" />
 
             <LinearLayout
                 android:id="@+id/LinearLayout22"
@@ -41,7 +41,7 @@
                     android:gravity="center"
                     android:text="Bem vindo:"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
                     tools:ignore="HardcodedText" />
 
                 <Space
@@ -53,31 +53,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="left|center"
-                    android:text="nome"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
-                    tools:ignore="HardcodedText" />
+                    android:textSize="20sp"
+                    tools:ignore="HardcodedText,RtlHardcoded" />
 
             </LinearLayout>
-
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="150dp" />
 
-
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <Button
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:text="Cadastro de despesa"
                     android:layout_gravity="center"
                     android:onClick="cadastroDespesa"
-                    tools:ignore="HardcodedText" />
+                    android:text="Cadastro de despesa"
+                    tools:ignore="HardcodedText,UsingOnClickInXml" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -86,13 +83,30 @@
                 <Button
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:text="Visualizar despesas"
                     android:layout_gravity="center"
                     android:onClick="visualizarDespesas"
-                    tools:ignore="HardcodedText" />
+                    android:text="Visualizar despesas"
+                    tools:ignore="HardcodedText,UsingOnClickInXml" />
 
             </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/t_i_vetline"
+            android:textColor="#000"
+            android:textSize="15sp" />
+    </RelativeLayout>
 </RelativeLayout>

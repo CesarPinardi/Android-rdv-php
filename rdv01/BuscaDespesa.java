@@ -8,8 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.Calendar;
 
@@ -18,8 +20,8 @@ public class BuscaDespesa extends AppCompatActivity implements View.OnClickListe
     private static final int DATE_DIALOG_ID = 0;
     Button btnDatePickerInicial, btnDatePickerFinal;
     TextView tvdataInicial, tvdataFinal;
-    String dataBancoI, dataBancoF;
-    String user;
+    String dataBancoI, dataBancoF, user;
+
     private int controleData;
     private final DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -29,30 +31,8 @@ public class BuscaDespesa extends AppCompatActivity implements View.OnClickListe
             } else if (controleData == 2) {
                 tvdataFinal.setText(data);
             }
-            /*
-             * A lógica por trás do formato da data:
-             *   a string terá que ter tamanho = 10, sendo assim
-             *   se o tamanho for = 10 -> a data está ok
-             *   se o tamanho for = 8 -> o dia ou o mes é < 10
-             *       encontrando a posição do "-"
-             *       ->(00-00-0000) -> tamanho = 10
-             *       ->(0-0-0000)   -> tamanho = 8
-             *       ->(00-0-0000)  -> mês < 10
-             *       ->(0-00-0000)  -> dia < 10
-             *         [0123456789]
-             *           se for em [1] -> o dia é < 10
-             *           se for em [4] -> o mes é < 10
-             *       após encontrar, inserir um caracter "0" uma posição antes (ou 0 ou 3)
-             *   se o tamanho for = 7 -> o dia e o mes são < 10
-             *       refaz a string acrescentando um 0 antes do dia e do mes
-             *
-             *   depois disso, separa a string em 3 partes (dia, mes, ano) e
-             *   coloca na ordem para inserir no banco (ano, mes, dia)
-             */
-
             formataData();
             inverteData();
-
         }
 
     };
@@ -61,6 +41,7 @@ public class BuscaDespesa extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_busca_despesa);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         btnDatePickerInicial = findViewById(R.id.btnDataInicial);
         btnDatePickerFinal = findViewById(R.id.btnDataFinal);
@@ -126,9 +107,9 @@ public class BuscaDespesa extends AppCompatActivity implements View.OnClickListe
         int tamString = dataFormatada.length();
 
         if (tamString == 10) {
-            System.out.println("Data no tamanho ok");
+            System.out.println("Tamanho string = 10 -> Data no tamanho ok");
         } else if (tamString == 8) {
-            System.out.println("Mes e dia < 10");
+            System.out.println("Tamanho string = 8 -> Mes e dia < 10");
             String novaData = aumentaTamString();
             if (controleData == 1) {
                 tvdataInicial.setText(novaData);
@@ -136,7 +117,7 @@ public class BuscaDespesa extends AppCompatActivity implements View.OnClickListe
                 tvdataFinal.setText(novaData);
             }
         } else if (tamString == 9) {
-            System.out.println("Mes ou dia < 10.\nAgora descobrir qual dos dois é:");
+            System.out.println("Tamanho string = 9 -> Mes ou dia < 10.\nAgora descobrir qual dos dois é: ");
             char achaDia = dataFormatada.charAt(1);
             char achaMes = dataFormatada.charAt(4);
             if (achaDia == '-') {
@@ -216,20 +197,35 @@ public class BuscaDespesa extends AppCompatActivity implements View.OnClickListe
 
         }
 
-
     }
-
 
     public void confirmarDatas(View view) {
 
-        //checar datas iguais ou com intervalo entre elas < 1
+        String dataF = tvdataFinal.getText().toString();
+        String dataI = tvdataInicial.getText().toString();
 
-        Intent gridDesp = new Intent(BuscaDespesa.this, GridDespesa.class);
-        gridDesp.putExtra("User", user);
-        gridDesp.putExtra("DataInicial", tvdataInicial.getText().toString());
-        gridDesp.putExtra("DataFinal", tvdataFinal.getText().toString());
-        gridDesp.putExtra("DataBancoI", dataBancoI);
-        gridDesp.putExtra("DataBancoF", dataBancoF);
-        startActivity(gridDesp);
+        System.out.print("Data Inicial: " + dataI);
+        System.out.print("Data Final: " + dataF);
+
+        if (dataI.isEmpty() || dataF.isEmpty()) {
+
+            Toast.makeText(getApplicationContext(), "Escolha duas datas para confirmar!", Toast.LENGTH_SHORT).show();
+
+        } else if (dataI.equals(dataF)) {
+
+            Toast.makeText(getApplicationContext(), "As datas são iguais!", Toast.LENGTH_SHORT).show();
+
+        } else {
+
+            Intent gridDesp = new Intent(BuscaDespesa.this, GridDespesa.class);
+            gridDesp.putExtra("User", user);
+            gridDesp.putExtra("DataInicial", tvdataInicial.getText().toString());
+            gridDesp.putExtra("DataFinal", tvdataFinal.getText().toString());
+            gridDesp.putExtra("DataBancoI", dataBancoI);
+            gridDesp.putExtra("DataBancoF", dataBancoF);
+            startActivity(gridDesp);
+
+        }
+
     }
 }

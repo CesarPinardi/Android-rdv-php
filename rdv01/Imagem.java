@@ -165,7 +165,7 @@ public class Imagem extends AppCompatActivity {
 
     private void getRandom() {
         Random r = new Random();
-        float i1 = (float) (r.nextInt(1000 - 1));
+        float i1 = (float) (r.nextInt(100000 - 1));
         auxRand = Float.toString(i1);
     }
 

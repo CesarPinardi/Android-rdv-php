@@ -93,6 +93,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
                     android:gravity="bottom" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -102,9 +103,7 @@
 
                 <Space
                     android:layout_width="16dp"
-                    android:layout_height="match_parent">
-
-                </Space>
+                    android:layout_height="match_parent" />
 
                 <TextView
                     android:id="@+id/tvResult"
@@ -138,12 +137,12 @@
                     android:id="@+id/etValorDesp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:textAlignment="center"
-                    android:text=""
+                    android:autofillHints=""
                     android:digits="0123456879,."
                     android:gravity="center_horizontal"
-                    android:autofillHints=""
+                    android:inputType="number"
+                    android:text=""
+                    android:textAlignment="center"
                     tools:ignore="LabelFor" />
 
             </LinearLayout>
@@ -255,7 +254,6 @@
                     android:textSize="19sp"
                     tools:ignore="HardcodedText,LabelFor" />
 
-
             </LinearLayout>
 
             <TextView
@@ -301,6 +299,7 @@
                     android:onClick="OnVoltar"
                     android:text="Voltar"
                     tools:ignore="HardcodedText" />
+
             </LinearLayout>
 
         </LinearLayout>
@@ -321,5 +320,7 @@
             android:text="@string/t_i_vetline"
             android:textColor="#000"
             android:textSize="15sp" />
+
     </RelativeLayout>
+
 </RelativeLayout>

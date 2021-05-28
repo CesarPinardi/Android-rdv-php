@@ -24,7 +24,7 @@ public class NumberTextWatcher implements TextWatcher {
         if (s != null && !s.toString().isEmpty()) {
             try {
                 //Take the input string and remove all formatting characters
-                String v = s.toString().replace(String.valueOf(dfnd.getDecimalFormatSymbols().getGroupingSeparator()), "").replace("R$","").replace(String.valueOf(dfnd.getDecimalFormatSymbols().getDecimalSeparator()), "");
+                String v = s.toString().replace(String.valueOf(dfnd.getDecimalFormatSymbols().getGroupingSeparator()), "").replace("R$", "").replace(String.valueOf(dfnd.getDecimalFormatSymbols().getDecimalSeparator()), "");
                 //Pass the altered string to a number
                 Number n = dfnd.parse(v);
                 //Get the decimal point correct again
@@ -52,7 +52,6 @@ public class NumberTextWatcher implements TextWatcher {
     }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count)
-    {
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
     }
 }

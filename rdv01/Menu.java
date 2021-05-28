@@ -28,7 +28,7 @@ public class Menu extends AppCompatActivity {
         user = findViewById(R.id.tvnomeMenu);
         pegarDados();
 
-        if(!pegarDados()){
+        if (!pegarDados()) {
             recuperarVoltar();
         }
 
@@ -36,7 +36,6 @@ public class Menu extends AppCompatActivity {
         String strU = prefs.getString("usr", "");
         user.setText(strU);
         recuperarVoltar();
-
 
     }
 
@@ -71,7 +70,7 @@ public class Menu extends AppCompatActivity {
 
     private void enviarDados(int qualClasse) {
 
-        if(qualClasse == 1){
+        if (qualClasse == 1) {
 
             Intent cadastro = new Intent(Menu.this, Movimento.class);
             cadastro.putExtra("loginUser", user.getText().toString());
@@ -80,7 +79,7 @@ public class Menu extends AppCompatActivity {
             cadastro.putExtra("gerencia", getGerenc);
             startActivity(cadastro);
 
-        } else if (qualClasse == 2){
+        } else if (qualClasse == 2) {
 
             Intent busca = new Intent(Menu.this, BuscaDespesa.class);
             busca.putExtra("User", user.getText().toString());

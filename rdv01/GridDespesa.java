@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,36 +31,31 @@ public class GridDespesa extends AppCompatActivity {
     ListView lv;
     ArrayList<String> holder = new ArrayList<>();
     TextView tvdataInicial, tvDataFinal;
-    String dataInicialBanco, dataFinalBanco;
-    //Button btnVerFoto;
-
-    String id_foto;
-
-    String auxHolder;
-    String usuario;
-
-    //Integer id_busca_foto;
+    String dataInicialBanco, dataFinalBanco, id_foto, auxHolder, usuario;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid_despesa);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         tvdataInicial = findViewById(R.id.tvExibirDataInicial);
+
         tvDataFinal = findViewById(R.id.tvExibirDataFinal);
 
         lv = findViewById(R.id.lv);
 
+        //setando o click no item da listview
         lv.setOnItemClickListener((parent, view, position, id) -> {
             String dados = (String) ((TextView) view).getText();
             System.out.print(dados);
 
-            int indexN = dados.indexOf('D',4);
+            int indexN = dados.indexOf('D', 4);
 
             System.out.print("index of /n is: " + indexN);
 
-            String substring = dados.substring(0,indexN);
+            String substring = dados.substring(0, indexN);
 
             System.out.print("substring is: " + substring);
 
@@ -67,19 +63,16 @@ public class GridDespesa extends AppCompatActivity {
 
             Pattern p = Pattern.compile("\\d+");
             Matcher m = p.matcher(substring);
-            while(m.find()) {
+            while (m.find()) {
                 aux = m.group();
             }
-
 
             Intent intent = new Intent(getApplicationContext(), DisplayFoto.class);
             intent.putExtra("idFoto", aux);
             intent.putExtra("user", usuario);
             startActivity(intent);
 
-
         });
-
 
         pegarDados();
 
@@ -90,9 +83,6 @@ public class GridDespesa extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void getDespesa() {
-        /*string exemplo http://189.1.174.107:8080/app/get-despesa.php/?dataM=2021-05-07*/
-
-        /*fazer o get com o usuario!!*/
 
         String apiurl = getString(R.string.getDespesa1) + dataInicialBanco + getString(R.string.getDespesa2) + dataFinalBanco + getString(R.string.getDespesa3) + usuario;
         @SuppressLint("StaticFieldLeak")
@@ -106,9 +96,7 @@ public class GridDespesa extends AppCompatActivity {
                     for (int i = 0; i < ja.length(); i++) {
                         jo = ja.getJSONObject(i);
 
-
                         String id_pic = jo.getString("id");
-                        //String cd_user = jo.getString("cd_user");
                         String valor_desp = jo.getString("valor_desp");
                         String despesa = jo.getString("id_desp");
                         String strdata = jo.getString("dataM");
@@ -154,10 +142,6 @@ public class GridDespesa extends AppCompatActivity {
                         System.out.print("nova data: " + novaData);
 
                     }
-                    //Handler handler = new Handler();
-                    //handler.postDelayed(() -> {
-
-                    //},1500);
 
                     ArrayAdapter<String> at = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, holder);
 

@@ -1,4 +1,4 @@
-package com.controll_rdv.rdv03;
+package com.controll_rdv.rdv01;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -61,25 +61,31 @@ public class Menu extends AppCompatActivity {
 
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void getDespesa() {
-
-        String apiurl = getString(R.string.getGastos) + "beto";
+        //url para busca
+        String apiurl = getString(R.string.getGastos) + user.getText().toString();
         @SuppressLint("StaticFieldLeak")
         class dbManager extends AsyncTask<String, Void, String> {
             @RequiresApi(api = Build.VERSION_CODES.O)
             protected void onPostExecute(String data) {
                 try {
+
                     JSONArray ja = new JSONArray(data);
                     JSONObject jo;
                     holder.clear();
+
                     for (int i = 0; i < ja.length(); i++) {
                         jo = ja.getJSONObject(i);
 
                         String despesa = jo.getString("id_desp");
                         String total = jo.getString("sum(valor_desp)");
 
+                        String str = total;
+                        String replaceString = str.replace('.',',');
+                        System.out.println("replaceString: "+replaceString);
+
+                        //switch substituindo o id pela despesa
                         String tipoDesp;
                         switch (Integer.parseInt(despesa)) {
                             case 1:
@@ -101,11 +107,9 @@ public class Menu extends AppCompatActivity {
                                 tipoDesp = "Pedágio";
                                 break;
                             default:
-                                throw new IllegalStateException("Unexpected value: " + Integer.parseInt(despesa));
+                                throw new IllegalStateException("Despesa não encontrada: " + Integer.parseInt(despesa));
                         }
-
-                        holder.add(tipoDesp + ": R$" + total);
-
+                        holder.add(tipoDesp + ": R$" + replaceString);
                     }
 
                     ArrayAdapter<String> at = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, holder);
@@ -113,9 +117,10 @@ public class Menu extends AppCompatActivity {
                     lv.setAdapter(at);
 
                 } catch (Exception e) {
+
                     System.out.print(e.getMessage());
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    //finish();
+                    Toast.makeText(getApplicationContext(), "Não há gastos no mês atual!", Toast.LENGTH_SHORT).show();
+
                 }
             }
 
@@ -133,6 +138,7 @@ public class Menu extends AppCompatActivity {
                     while ((line = br.readLine()) != null) {
                         data.append(line).append("\n");
                     }
+
                     br.close();
 
                     return data.toString();
@@ -140,17 +146,11 @@ public class Menu extends AppCompatActivity {
                 } catch (IOException e) {
                     return e.getMessage();
                 }
-
             }
-
-
         }
-
         dbManager obj = new dbManager();
         obj.execute(apiurl);
-
     }
-
 
     private void recuperarVoltar() {
         /*recuperando o username a partir da funcao sharedpreferences*/

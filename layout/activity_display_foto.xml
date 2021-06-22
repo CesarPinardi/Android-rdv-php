@@ -55,7 +55,7 @@
                 android:visibility="invisible"
                 tools:ignore="HardcodedText" />
 
-            <ImageView
+            <com.github.chrisbanes.photoview.PhotoView
                 android:id="@+id/img"
                 android:layout_width="match_parent"
                 android:layout_height="360dp"

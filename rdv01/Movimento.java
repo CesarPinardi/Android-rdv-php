@@ -28,7 +28,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.controll_rdv.rdv01.databinding.ActivityMovimentoBinding;
+//import com.controll_rdv.rdv01.databinding.ActivityMovimentoBinding;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -76,14 +76,14 @@ public class Movimento extends AppCompatActivity implements View.OnClickListener
         }
     };
     String finalString;
-    ActivityMovimentoBinding binding;
+    //ActivityMovimentoBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = ActivityMovimentoBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_movimento);
+        //binding = ActivityMovimentoBinding.inflate(getLayoutInflater());
+        //setContentView(binding.getRoot());
 
         /*associando os campos*/
         id_func = findViewById(R.id.etFunc);

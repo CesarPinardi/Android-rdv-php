@@ -70,7 +70,8 @@
                 android:gravity="left"
                 android:text="@string/gastos_do_mes"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                tools:ignore="RtlHardcoded" />
 
             <Space
                 android:layout_width="match_parent"
@@ -79,7 +80,8 @@
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="201dp"
-                android:id="@+id/lv"/>
+                android:id="@+id/lv"
+                tools:ignore="NestedScrolling" />
 
             <Space
                 android:layout_width="match_parent"
@@ -101,7 +103,7 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="70dp" />
+                    android:layout_height="60dp" />
 
                 <Button
                     android:layout_width="250dp"

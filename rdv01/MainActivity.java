@@ -45,7 +45,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
     /* String para o banco */
     private static final String URL =
-            "http://189.1.174.107:8080/app/user_control.php";
+            "";
     ListView lv;
     EditText userEt, passEt;
     Button login;

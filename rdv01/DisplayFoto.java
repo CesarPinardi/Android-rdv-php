@@ -1,115 +1,58 @@
 package com.controll_rdv.rdv01;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
+import java.util.Calendar;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+public class BuscaDespesa extends AppCompatActivity implements View.OnClickListener {
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+    private static final int DATE_DIALOG_ID = 0;
+    Button btnDatePickerInicial, btnDatePickerFinal;
+    TextView tvdataInicial, tvdataFinal;
+    String dataBancoI, dataBancoF, user;
 
-public class DisplayFoto extends AppCompatActivity implements View.OnClickListener {
-    TextView idFoto, tvPath;
-    ImageView imageView;
-    String image_path, user;
+    private int controleData;
+    private final DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            String data = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+            if (controleData == 1) {
+                tvdataInicial.setText(data);
+            } else if (controleData == 2) {
+                tvdataFinal.setText(data);
+            }
+            formataData();
+            inverteData();
+        }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_foto);
+        setContentView(R.layout.activity_busca_despesa);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-        idFoto = findViewById(R.id.tvLabelIDFoto);
-        imageView = findViewById(R.id.img);
+        btnDatePickerInicial = findViewById(R.id.btnDataInicial);
+        btnDatePickerFinal = findViewById(R.id.btnDataFinal);
 
-        tvPath = findViewById(R.id.tvlabelPath);
-
-        idFoto.setVisibility(View.INVISIBLE);
+        tvdataInicial = findViewById(R.id.tvDataInicial);
+        tvdataFinal = findViewById(R.id.tvDataFinal);
 
         pegarDados();
 
-        getImagePath();
-
-    }
-
-    public void getImagePath() {
-
-        String apiurl = "http://189.1.174.107:8080/app/get-image-id.php/?id=" + idFoto.getText().toString();
-        @SuppressLint("StaticFieldLeak")
-        class dbManager extends AsyncTask<String, Void, String> {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            protected void onPostExecute(String data) {
-                try {
-                    JSONArray ja = new JSONArray(data);
-                    JSONObject jo;
-
-                    for (int i = 0; i < ja.length(); i++) {
-
-                        jo = ja.getJSONObject(i);
-                        image_path = jo.getString("image_path");
-
-                    }
-
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "Erro!", Toast.LENGTH_LONG).show();
-                }
-                tvPath.setText(image_path);
-                String path = tvPath.getText().toString();
-
-                Picasso.with(getApplicationContext()).load("http://189.1.174.107:8080/RDV/_lib/file/img/" + path).into(imageView);
-
-            }
-
-            @Override
-            protected String doInBackground(String... strings) {
-                try {
-                    java.net.URL url = new URL(strings[0]);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuilder data = new StringBuilder();
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        data.append(line).append("\n");
-                    }
-                    br.close();
-                    return data.toString();
-
-                } catch (IOException e) {
-                    return e.getMessage();
-                }
-
-            }
-        }
-
-        dbManager obj = new dbManager();
-        obj.execute(apiurl);
+        btnDatePickerInicial.setOnClickListener(this);
+        btnDatePickerFinal.setOnClickListener(this);
 
     }
 
@@ -118,78 +61,171 @@ public class DisplayFoto extends AppCompatActivity implements View.OnClickListen
         if (intent != null) {
             Bundle params = intent.getExtras();
             if (params != null) {
-                String id = params.getString("idFoto");
-                idFoto.setText(id);
-                String usr = params.getString("user");
-                user = usr;
+                String usuario = params.getString("User");
+                user = usuario;
             }
         }
     }
 
     @Override
     public void onClick(View v) {
-
+        if (v == btnDatePickerInicial) {
+            controleData = 1;
+            showDialog(DATE_DIALOG_ID);
+        } else if (v == btnDatePickerFinal) {
+            controleData = 2;
+            showDialog(DATE_DIALOG_ID);
+        }
     }
 
-    public void excluir(View view) {
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        Calendar calendario = Calendar.getInstance();
 
-        AlertDialog alerta;
+        int ano = calendario.get(Calendar.YEAR);
+        int mes = calendario.get(Calendar.MONTH);
+        int dia = calendario.get(Calendar.DAY_OF_MONTH);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (id == DATE_DIALOG_ID) {
+            return new DatePickerDialog(this, mDateSetListener, ano, mes, dia);
+        }
 
-        builder.setMessage("Deseja mesmo excluir essa despesa?");
-
-        builder.setPositiveButton("Sim", (arg0, arg1) -> {
-            excluirDespesa();
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                Intent intent = new Intent(getApplicationContext(), Menu.class);
-                intent.putExtra("userEx", user);
-                finish();
-                startActivity(intent);
-            }, 3000);
-
-
-        });
-
-        builder.setNegativeButton("Não", (arg0, arg1) -> {
-            Toast.makeText(getApplicationContext(), "OK!\nA despesa não fui excluída!\nVoltando para o menu!", Toast.LENGTH_SHORT).show();
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                Intent v = new Intent(DisplayFoto.this, Menu.class);
-                v.putExtra("UserEx", user);
-                finish();
-                startActivity(v);
-            }, 3000);
-        });
-
-        alerta = builder.create();
-
-        alerta.show();
-
+        return null;
     }
 
-    private void excluirDespesa() {
-        StringRequest request = new StringRequest(Request.Method.POST, "http://189.1.174.107:8080/rdv/_lib/file/img/php/delete.php?id=" + idFoto.getText().toString(),
-                response -> {
-                    if (response.equalsIgnoreCase("Data Deleted")) {
-                        Toast.makeText(getApplicationContext(), "Despesa deletada!\nVoltando para o menu!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Despesa não deletada!\nVoltando para o menu!", Toast.LENGTH_SHORT).show();
-                    }
-                }, error -> Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show()) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
+    public void formataData() {
+        String dataFormatada = "";
+        if (controleData == 1) {
+            dataFormatada = tvdataInicial.getText().toString();
+        } else if (controleData == 2) {
+            dataFormatada = tvdataFinal.getText().toString();
+        }
 
-                params.put("id", idFoto.getText().toString());
+        System.out.println("Data sem formatar, vindo do pickerDialog: " + dataFormatada);
+        System.out.println("Verificando tamanho da string...");
 
-                return super.getParams();
+        int tamString = dataFormatada.length();
+
+        if (tamString == 10) {
+            System.out.println("Tamanho string = 10 -> Data no tamanho ok");
+        } else if (tamString == 8) {
+            System.out.println("Tamanho string = 8 -> Mes e dia < 10");
+            String novaData = aumentaTamString();
+            if (controleData == 1) {
+                tvdataInicial.setText(novaData);
+            } else if (controleData == 2) {
+                tvdataFinal.setText(novaData);
             }
-        };
+        } else if (tamString == 9) {
+            System.out.println("Tamanho string = 9 -> Mes ou dia < 10.\nAgora descobrir qual dos dois é: ");
+            char achaDia = dataFormatada.charAt(1);
+            char achaMes = dataFormatada.charAt(4);
+            if (achaDia == '-') {
+                String novaData = addChar(dataFormatada, '0', 0);
+                System.out.println("Dia < 10: " + novaData);
+                if (controleData == 1) {
+                    tvdataInicial.setText(novaData);
+                } else if (controleData == 2) {
+                    tvdataFinal.setText(novaData);
+                }
+            } else if (achaMes == '-') {
+                String novaData = addChar(dataFormatada, '0', 3);
+                System.out.println("Mes < 10: " + novaData);
+                if (controleData == 1) {
+                    tvdataInicial.setText(novaData);
+                } else if (controleData == 2) {
+                    tvdataFinal.setText(novaData);
+                }
+            }
+        }
+    }
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(request);
+    public String aumentaTamString() {
+        String data = "";
+
+        if (controleData == 1) {
+            data = tvdataInicial.getText().toString();
+        } else if (controleData == 2) {
+            data = tvdataFinal.getText().toString();
+        }
+
+        String auxDia = data.substring(0, 1);
+        String auxMes = data.substring(2, 3);
+        String auxAno = data.substring(4, 8);
+
+        System.out.println("-----Aumento da string-----");
+        System.out.println("Mes:" + auxMes + "\nDia:" + auxDia + "\nAno:" + auxAno);
+
+        String aux = "0" + auxDia + "-" + "0" + auxMes + "-" + auxAno;
+        System.out.println("Nova data aumentada" + aux);
+        return aux;
+    }
+
+    public String addChar(String str, char ch, int position) {
+        int len = str.length();
+        char[] updatedArr = new char[len + 1];
+        str.getChars(0, position, updatedArr, 0);
+        updatedArr[position] = ch;
+        str.getChars(position, len, updatedArr, position + 1);
+        return new String(updatedArr);
+    }
+
+    public void inverteData() {
+
+        String dataBr;
+
+        if (controleData == 1) {
+            dataBr = tvdataInicial.getText().toString();
+            String auxAno = dataBr.substring(6, 10);
+            String auxMes = dataBr.substring(3, 5);
+            String auxDia = dataBr.substring(0, 2);
+
+            System.out.println("Data para inverter: \nAno:" + auxAno + "\nMes:" + auxMes + "\nDia:" + auxDia);
+
+            dataBancoI = auxAno + "-" + auxMes + "-" + auxDia;
+            System.out.println("\nData invertida para o banco: " + dataBancoI);
+        } else if (controleData == 2) {
+            dataBr = tvdataFinal.getText().toString();
+            String auxAno = dataBr.substring(6, 10);
+            String auxMes = dataBr.substring(3, 5);
+            String auxDia = dataBr.substring(0, 2);
+
+            System.out.println("Data para inverter: \nAno:" + auxAno + "\nMes:" + auxMes + "\nDia:" + auxDia);
+
+            dataBancoF = auxAno + "-" + auxMes + "-" + auxDia;
+            System.out.println("\nData invertida para o banco: " + dataBancoF);
+
+        }
+
+    }
+
+    public void confirmarDatas(View view) {
+
+        String dataF = tvdataFinal.getText().toString();
+        String dataI = tvdataInicial.getText().toString();
+
+        System.out.print("Data Inicial: " + dataI);
+        System.out.print("Data Final: " + dataF);
+
+        if (dataI.isEmpty() || dataF.isEmpty()) {
+
+            Toast.makeText(getApplicationContext(), "Escolha duas datas para confirmar!", Toast.LENGTH_SHORT).show();
+
+        } else if (dataI.equals(dataF)) {
+
+            Toast.makeText(getApplicationContext(), "As datas são iguais!", Toast.LENGTH_SHORT).show();
+
+        } else {
+
+            Intent gridDesp = new Intent(BuscaDespesa.this, GridDespesa.class);
+            gridDesp.putExtra("User", user);
+            gridDesp.putExtra("DataInicial", tvdataInicial.getText().toString());
+            gridDesp.putExtra("DataFinal", tvdataFinal.getText().toString());
+            gridDesp.putExtra("DataBancoI", dataBancoI);
+            gridDesp.putExtra("DataBancoF", dataBancoF);
+            startActivity(gridDesp);
+
+        }
 
     }
 }
